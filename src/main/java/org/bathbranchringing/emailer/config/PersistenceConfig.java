@@ -18,7 +18,7 @@ public class PersistenceConfig {
 
 	private static final String DIALECT = "org.hibernate.dialect.MySQL5Dialect";
 	private static final String SHOW_SQL = "false";
-	private static final String AUTO_ACTION = "create";
+	private static final String AUTO_ACTION = "create-drop";
 	private static final String IMPORT_FILES = "sql/staticData.sql";
 
 	@Bean
@@ -30,8 +30,8 @@ public class PersistenceConfig {
 		
 		Properties hibernateProperties = new Properties();
 		sessionFactory.setHibernateProperties(hibernateProperties);
-//		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", AUTO_ACTION);
-//		hibernateProperties.setProperty("hibernate.hbm2ddl.import_files", IMPORT_FILES);
+		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", AUTO_ACTION);
+		hibernateProperties.setProperty("hibernate.hbm2ddl.import_files", IMPORT_FILES);
 		hibernateProperties.setProperty("hibernate.show_sql", SHOW_SQL);
 		hibernateProperties.setProperty("hibernate.dialect", DIALECT);
 		hibernateProperties.setProperty("hibernate.dialect", DIALECT);
