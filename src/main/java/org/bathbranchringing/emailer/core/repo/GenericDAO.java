@@ -18,6 +18,7 @@ public class GenericDAO<E, K extends Serializable> {
 
 	protected Class<? extends E> daoType;
 	
+	@SuppressWarnings("unchecked")
 	public GenericDAO() {
 		daoType = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
 				                        .getActualTypeArguments()[0];
@@ -39,10 +40,12 @@ public class GenericDAO<E, K extends Serializable> {
         currentSession().delete(entity);
     }
 
+	@SuppressWarnings("unchecked")
     public E find(K key) {
         return (E) currentSession().get(daoType, key);
     }
 
+	@SuppressWarnings("unchecked")
     public List<E> list() {
         return currentSession().createCriteria(daoType).list();
     }

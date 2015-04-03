@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="/fragments/header :: head(title='Home')"></head>
+
+<body>
+
+	<nav th:replace="/fragments/header :: navigation"></nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <div th:include="/fragments/side :: navigation(title='Home')"></div>
+
+            <div class="col-md-9">
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <div th:include="/fragments/footer"></div>
+
+</body>
+
+</html>
