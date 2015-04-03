@@ -19,6 +19,6 @@ public class MyFirstViewController {
 	
 	@RequestMapping({"/hi","/"})
 	public String hello() {
-		return "test";
+		return "tower";
 	}
 }
