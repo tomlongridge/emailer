@@ -8,7 +8,7 @@
 	     	<span th:text="${tower.tenorWeight}"></span>
 	     </h4>
 	    <div class="list-group">
-	        <a th:href="@{/towers/{towerId}/notices(towerId=${tower.doveId})}" class="list-group-item" th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'list-group-item-selected' : ''}">Notices</a>
+	        <a th:href="@{/towers/{towerId}/notices(towerId=${tower.doveId})}" class="list-group-item" th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'active' : ''}">Notices</a>
 	        <a href="#" class="list-group-item">Diary</a>
 	        <a href="#" class="list-group-item">Tower Information</a>
 	        <a href="#" class="list-group-item">Contacts &amp; Members</a>

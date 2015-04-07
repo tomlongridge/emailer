@@ -22,9 +22,6 @@ public class User {
 	@Column(nullable = false, length = 100)
 	private String surname;
 	
-	@Column(length = 30)
-	private String middleInitials;
-
 	@Column(nullable = false, length = 150)
 	private String emailAddress;
 	
@@ -40,11 +37,11 @@ public class User {
 		return surname;
 	}
 
-	public String getMiddleInitials() {
-		return middleInitials;
-	}
-
 	public String getEmailAddress() {
 		return emailAddress;
+	}
+	
+	public String getDisplayName() {
+		return String.format("%s %s", firstName, surname);
 	}
 }

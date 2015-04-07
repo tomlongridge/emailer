@@ -12,7 +12,7 @@
 
         <div class="row">
 
-            <div th:include="/fragments/side(title=${tower.displayName})"></div>
+            <div th:include="/fragments/side"></div>
 
             <div class="col-md-9">
 
@@ -21,12 +21,13 @@
 					<div class="col-sm-4 col-lg-4 col-md-4" th:each="notice : ${notices}">
 					    <div class="thumbnail">
 					        <div class="caption">
-					        
-					            <h4><a href="#" th:text="${notice.heading}"></a></h4>
+					            <h4>
+					            	<a th:href="@{notices/{noticeId}(noticeId=${notice.id})}"
+					            	   th:text="${notice.heading}"></a>
+					           	</h4>
 					            <p th:text="${notice.content}"></p>
-					        </div>
-					        <div class="ratings">
-					            <p class="pull-right"><a href="#">See more&hellip;</a></p>
+					            <p class="pull-right">
+					            	<a th:href="@{notices/{noticeId}(noticeId=${notice.id})}">See more&hellip;</a></p>
 					        </div>
 					    </div>
 					</div>
