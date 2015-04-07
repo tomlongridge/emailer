@@ -1,0 +1,8 @@
+/*!
+ * Tower Board Styles
+ */
+
+a.list-group-item-selected {
+  color: #337ab7;
+  font-weight: bold;
+}

@@ -18,6 +18,9 @@ public class Tower {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
+	@Column(length = 20)
+	private String doveId;
+	
 	@Column(length = 100)
 	private String dedication;
 
@@ -30,9 +33,25 @@ public class Tower {
 	@ManyToOne
 	@JoinColumn(name = "countyId")
 	private County county;
+	
+	@Column(nullable = false)
+	private short numBells;
+	
+	@Column(nullable = false)
+	private short tenorWeightCwt;
+	
+	@Column(nullable = false)
+	private short tenorWeightQtrs;
+	
+	@Column(nullable = false)
+	private short tenorWeightLbs;
 
 	public long getId() {
 		return id;
+	}
+
+	public String getDoveId() {
+		return doveId;
 	}
 
 	public String getDedication() {
@@ -49,6 +68,44 @@ public class Tower {
 
 	public County getCounty() {
 		return county;
+	}
+	
+	public short getNumBells() {
+		return numBells;
+	}
+
+	public short getTenorWeightCwt() {
+		return tenorWeightCwt;
+	}
+
+	public short getTenorWeightQtrs() {
+		return tenorWeightQtrs;
+	}
+
+	public short getTenorWeightLbs() {
+		return tenorWeightLbs;
+	}
+
+	public String getDisplayName() {
+		StringBuilder name = new StringBuilder();
+		if (dedication != null) {
+			name.append(dedication);
+			name.append(", "); 
+		}
+		if (area != null) {
+			name.append(area);
+			name.append(", "); 
+		}
+		name.append(town);
+		return name.toString();
+	}
+	
+	public String getTenorWeight() {
+		if ((tenorWeightLbs == 0) && (tenorWeightQtrs == 0)) {
+			return tenorWeightCwt + " cwt";
+		} else {
+			return String.format("%d-%d-%d", tenorWeightCwt, tenorWeightQtrs, tenorWeightLbs);
+		}
 	}
 
 }

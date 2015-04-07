@@ -22,7 +22,7 @@ public class User {
 	@Column(nullable = false, length = 100)
 	private String surname;
 	
-	@Column(nullable = false, length = 30)
+	@Column(length = 30)
 	private String middleInitials;
 
 	@Column(nullable = false, length = 150)

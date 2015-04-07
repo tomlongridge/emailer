@@ -1,11 +1,17 @@
 <html>
 <body>
 	<div class="col-md-3" th:fragment="navigation">
-	    <p class="lead" th:text="${title}"></p>
+	    <h3 th:text="${tower.displayName}"></h3>
+	    <h4>
+	    	<span th:text="${tower.county.name}"></span>,
+	     	<span style="font-weight: bold" th:text="${tower.numBells}"></span>,
+	     	<span th:text="${tower.tenorWeight}"></span>
+	     </h4>
 	    <div class="list-group">
-	        <a href="#" class="list-group-item">xCategory 1</a>
-	        <a href="#" class="list-group-item">xCategory 2</a>
-	        <a href="#" class="list-group-item">xCategory 3</a>
+	        <a th:href="@{/towers/{towerId}/notices(towerId=${tower.doveId})}" class="list-group-item" th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'list-group-item-selected' : ''}">Notices</a>
+	        <a href="#" class="list-group-item">Diary</a>
+	        <a href="#" class="list-group-item">Tower Information</a>
+	        <a href="#" class="list-group-item">Contacts &amp; Members</a>
 	    </div>
 	</div>
 </body>

@@ -1,6 +1,10 @@
 package org.bathbranchringing.emailer.controllers;
 
+import java.util.List;
+
+import org.bathbranchringing.emailer.core.domain.Notice;
 import org.bathbranchringing.emailer.core.domain.Tower;
+import org.bathbranchringing.emailer.core.repo.NoticeDAO;
 import org.bathbranchringing.emailer.core.repo.TowerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +18,11 @@ public class BoardController {
 	@Autowired
 	private TowerDAO towerDAO;
 	
-	@RequestMapping("/towers/{id}")
-	public String init(@PathVariable final long id, final ModelMap model) {
+	@Autowired
+	private NoticeDAO noticeDAO;
+	
+	@RequestMapping({"/towers/{id}", "/towers/{id}/notices"})
+	public String init(@PathVariable final String id, final ModelMap model) {
 		
 		final Tower tower = towerDAO.find(id);
 		
@@ -24,6 +31,10 @@ public class BoardController {
 		}
 		
 		model.addAttribute("tower", tower);
+		
+		final List<Notice> notices = noticeDAO.getTowerNotices(tower);
+		model.addAttribute("notices", notices);
+		
 		return "/pages/tower";
 	}
 }

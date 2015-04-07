@@ -30,8 +30,8 @@ public class PersistenceConfig {
 		
 		Properties hibernateProperties = new Properties();
 		sessionFactory.setHibernateProperties(hibernateProperties);
-//		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", AUTO_ACTION);
-//		hibernateProperties.setProperty("hibernate.hbm2ddl.import_files", IMPORT_FILES);
+		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", AUTO_ACTION);
+		hibernateProperties.setProperty("hibernate.hbm2ddl.import_files", IMPORT_FILES);
 		hibernateProperties.setProperty("hibernate.show_sql", SHOW_SQL);
 		hibernateProperties.setProperty("hibernate.dialect", DIALECT);
 		hibernateProperties.setProperty("hibernate.dialect", DIALECT);
