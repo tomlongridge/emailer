@@ -12,7 +12,7 @@
 
         <div class="row">
 
-            <div th:include="/fragments/side"></div>
+            <div th:replace="/fragments/towerNavigation :: navigation"></div>
 
             <div class="col-md-9">
 
@@ -27,7 +27,7 @@
 					           	</h4>
 					            <p th:text="${notice.content}"></p>
 					            <p class="pull-right">
-					            	<a th:href="@{notices/{noticeId}(noticeId=${notice.id})}">See more&hellip;</a></p>
+					            	<a th:href="@{/towers/{towerId}/notices/{date}/{noticeId}(towerId=${tower.doveId},date=${#calendars.format(notice.creationDate, 'yyyy/MM/dd')},noticeId=${notice.id})}">See more&hellip;</a></p>
 					        </div>
 					    </div>
 					</div>
