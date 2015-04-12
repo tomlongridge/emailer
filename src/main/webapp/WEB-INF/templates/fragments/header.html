@@ -47,17 +47,29 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">Search</a>
+                        <a href="#">Towers</a>
                     </li>
                     <li>
-                        <a href="#">My Account</a>
+                        <a href="#">Associations<br />&amp; Groups</a>
                     </li>
                     <li>
-                        <a href="#">Help</a>
+                        <a href="#">Personal</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
+                    <li th:if="${#httpServletRequest.remoteUser != null}">
+                        <a href="#">To Do&hellip;</a>
+                    </li>
+                    <li th:if="${#httpServletRequest.remoteUser != null}">
+                        <a href="#">My Board</a>
+                    </li>
+                    <li th:if="${#httpServletRequest.remoteUser != null}">
+                        <a href="#">Diary</a>
+                    </li>
+                    <li th:if="${#httpServletRequest.remoteUser != null}">
+                        <a th:href="@{/logout}">Sign Out (<span th:text="${#httpServletRequest.remoteUser}"></span>)</a>
+                    </li>
+                    <li th:if="${#httpServletRequest.remoteUser == null}">
                         <a href="#">Sign In</a>
                     </li>
                 </ul>

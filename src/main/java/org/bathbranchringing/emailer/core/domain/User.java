@@ -22,8 +22,14 @@ public class User {
 	@Column(nullable = false, length = 100)
 	private String surname;
 	
-	@Column(nullable = false, length = 150)
+	@Column(nullable = false, length = 150, unique = true)
 	private String emailAddress;
+	
+	@Column(nullable = false, length = 50)
+	private String password;
+	
+	@Column
+	private boolean enabled;
 	
 	public long getId() {
 		return id;
@@ -41,7 +47,15 @@ public class User {
 		return emailAddress;
 	}
 	
-	public String getDisplayName() {
+	public String getPassword() {
+        return password;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public String getDisplayName() {
 		return String.format("%s %s", firstName, surname);
 	}
 }

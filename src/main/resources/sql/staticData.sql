@@ -1,7 +1,9 @@
 USE emailer;
 
-INSERT INTO User (firstName, surname, emailAddress) VALUE ('Tom', 'Longridge', 'tomlongridge@gmail.com');
+INSERT INTO User (firstName, surname, emailAddress, password, enabled) VALUE ('Tom', 'Longridge', 'tomlongridge@gmail.com', 'tom', true);
 SET @userId = LAST_INSERT_ID();
+
+INSERT INTO UserRole (userId, role) VALUE (@userId, 'USER');
 
 INSERT INTO Country (name) VALUE ('England');
 SET @countryId = LAST_INSERT_ID();
