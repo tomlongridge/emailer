@@ -19,11 +19,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
     public void configure(final AuthenticationManagerBuilder builder) throws Exception {
-        builder.inMemoryAuthentication().withUser("tom").password("tom").roles("USER");
-//        builder.jdbcAuthentication()
-//            .dataSource(dataSource)
-//            .usersByUsernameQuery("select emailAddress as username, password, enabled from user where emailAddress = ?")
-//            .authoritiesByUsernameQuery("select user.emailAddress as username, userRole.role from userRole, user where userRole.userId = user.userId and user.emailAddress = ?");
+        builder.jdbcAuthentication()
+            .dataSource(dataSource)
+            .usersByUsernameQuery("select emailAddress, password, enabled from user where emailAddress = ?")
+            .authoritiesByUsernameQuery("select user.emailAddress, userRole.role from userRole, user where userRole.userId = user.userId and user.emailAddress = ?");
     }
     
     @Override
