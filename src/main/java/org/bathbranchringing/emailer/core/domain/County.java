@@ -22,7 +22,7 @@ public class County {
 	private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "countryId")
+	@JoinColumn(name = "country")
 	private Country country;
 	
 	public long getId() {

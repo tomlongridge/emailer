@@ -31,7 +31,7 @@ public class Tower {
 	private String town;
 	
 	@ManyToOne
-	@JoinColumn(name = "countyId")
+	@JoinColumn(name = "county")
 	private County county;
 	
 	@Column(nullable = false)

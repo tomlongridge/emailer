@@ -1,0 +1,14 @@
+<html>
+<body>
+    <div class="col-md-3" th:fragment="navigation">
+        <h3>Towers</h3>
+        <div class="list-group">
+            <a class="list-group-item"
+                th:href="@{/towers/?search}"
+                th:classappend="${(#httpServletRequest.queryString == null || #httpServletRequest.queryString.toString().contains('search')) ? 'active' : ''}">Search</a>
+            <a class="list-group-item" href="#">Browse by Location</a>
+            <a class="list-group-item" href="#">Browse by Group</a>
+        </div>
+    </div>
+</body>
+</html>

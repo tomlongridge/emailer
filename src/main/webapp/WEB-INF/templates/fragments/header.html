@@ -47,10 +47,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">Towers</a>
+                        <a th:href="@{/towers}">Towers</a>
                     </li>
                     <li>
-                        <a href="#">Associations<br />&amp; Groups</a>
+                        <a href="#">Groups</a>
                     </li>
                     <li>
                         <a href="#">Personal</a>
@@ -67,7 +67,7 @@
                         <a href="#">Diary</a>
                     </li>
                     <li th:if="${#httpServletRequest.remoteUser != null}">
-                        <a th:href="@{/logout}">Sign Out (<span th:text="${#httpServletRequest.remoteUser}"></span>)</a>
+                        <a th:href="@{/logout}" th:title="${#httpServletRequest.remoteUser}">Sign Out</a>
                     </li>
                     <li th:if="${#httpServletRequest.remoteUser == null}">
                         <a href="#">Sign In</a>
