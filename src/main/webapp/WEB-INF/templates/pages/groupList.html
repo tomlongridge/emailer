@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:include="/fragments/header :: head(title='Towers')"></head>
+<head th:include="/fragments/header :: head(title='Groups')"></head>
 
 <body>
 
@@ -12,17 +12,17 @@
 
         <div class="row">
 
-            <div th:replace="/fragments/towerListNavigation :: navigation"></div>
+            <div th:replace="/fragments/groupListNavigation :: navigation"></div>
             
             <div class="col-md-9">
 
                 <div class="row">
 
-                    <form class="form-inline" th:action="@{/towers}">
+                    <form class="form-inline" th:action="@{/groups}">
                         <div class="form-group">
                             <label class="sr-only" for="searchBox">Search</label>
                             <input type="text" class="form-control" id="searchBox" name="search"
-                                placeholder="Town, County, Dedication" />
+                                placeholder="Name" />
                         </div>
                         <button type="submit" class="btn btn-default">Search</button>
                     </form>
@@ -37,33 +37,20 @@
     
                             <thead>
                                 <tr>
-                                    <th>Tower</th>
-                                    <th>County</th>
-                                    <th>Bells</th>
+                                    <th>Name</th>
                                     <th></th>
                                 </tr>
                             </thead>
     
                             <tbody>
     
-                                <tr th:each="tower : ${towers}">
+                                <tr th:each="group : ${groups}">
                                     <td>
-                                        <strong th:text="${tower.town}"></strong>,
-                                        <span th:text="${tower.dedication}"></span>,
-                                        <span th:text="${tower.area}"></span>
-                                    </td>
-                                    <td>
-                                        <span th:text="${tower.county.name}"></span>,
-                                        <span th:text="${tower.county.country.name}"></span>
-                                    </td>
-                                    <td>
-                                        <strong th:text="${tower.numBells}">10</strong>,
-                                        <span th:text="${tower.tenorWeight}"></span>
+                                        <span th:text="${group.name}"></span>
                                     </td>
                                     <td>
                                         <a class="btn btn-primary pull-right"
-                                           th:href="@{/towers/{identifier}(identifier=${tower.identifier})}">View</a>
-                                    </td>
+                                           th:href="@{/groups/{identifier}(identifier=${group.identifier})}">View</a></td>
                                 </tr>
     
                             </tbody>

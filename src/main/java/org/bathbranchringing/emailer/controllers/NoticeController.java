@@ -20,7 +20,7 @@ public class NoticeController {
 	    final Notice notice = noticeDAO.find(noticeId);
 	    
 	    return String.format("redirect:/towers/%1$s/notices/%2$tY/%2$tm/%2$td/%3$d",
-	                         notice.getTower().getDoveId(),
+	                         notice.getBoard().getIdentifier(),
                              notice.getCreationDate(),
                              noticeId);
 	}

@@ -2,9 +2,7 @@ package org.bathbranchringing.emailer.core.repo;
 
 import java.util.List;
 
-import org.bathbranchringing.emailer.core.domain.County;
 import org.bathbranchringing.emailer.core.domain.Tower;
-import org.hibernate.cfg.CreateKeySecondPass;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -12,10 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TowerDAO extends GenericDAO<Tower, Long> {
 
-	public Tower find(final String doveId) {
+	public Tower find(final String identifier) {
 		return (Tower) currentSession()
 				.createCriteria(Tower.class)
-				.add(Restrictions.eq("doveId", doveId))
+				.add(Restrictions.eq("identifier", identifier))
 				.uniqueResult();
 	}
 

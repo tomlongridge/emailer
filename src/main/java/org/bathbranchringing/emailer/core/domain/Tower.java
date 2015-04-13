@@ -2,25 +2,16 @@ package org.bathbranchringing.emailer.core.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
 @Table
-public class Tower {
+@PrimaryKeyJoinColumn(name = "boardId")
+public class Tower extends Board {
 
-	@Column(name = "towerId")
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
-	@Column(length = 20)
-	private String doveId;
-	
 	@Column(length = 100)
 	private String dedication;
 
@@ -45,14 +36,6 @@ public class Tower {
 	
 	@Column(nullable = false)
 	private short tenorWeightLbs;
-
-	public long getId() {
-		return id;
-	}
-
-	public String getDoveId() {
-		return doveId;
-	}
 
 	public String getDedication() {
 		return dedication;

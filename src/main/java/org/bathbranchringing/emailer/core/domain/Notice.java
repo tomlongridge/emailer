@@ -30,8 +30,8 @@ public class Notice {
 	private String content;
 	
 	@ManyToOne
-	@JoinColumn(name = "tower")
-	private Tower tower;
+	@JoinColumn(name = "board")
+	private Board board;
 	
 	@ManyToOne
 	@JoinColumn(name = "createdBy")
@@ -59,8 +59,8 @@ public class Notice {
 		return content;
 	}
 	
-	public Tower getTower() {
-		return tower;
+	public Board getBoard() {
+		return board;
 	}
 
 	public User getCreatedBy() {
