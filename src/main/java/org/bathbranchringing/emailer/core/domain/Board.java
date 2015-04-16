@@ -44,5 +44,9 @@ public class Board {
     public List<Group> getAffiliatedTo() {
         return affiliatedTo;
     }
+    
+    public boolean isGroup() {
+        return false;
+    }
 
 }

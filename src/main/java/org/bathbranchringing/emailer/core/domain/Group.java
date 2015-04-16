@@ -24,4 +24,9 @@ public class Group extends Board {
 	public List<Board> getAffiliates() {
         return affiliates;
     }
+	
+	@Override
+	public boolean isGroup() {
+	    return true;
+	}
 }

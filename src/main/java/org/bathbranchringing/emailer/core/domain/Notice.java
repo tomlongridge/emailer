@@ -17,7 +17,39 @@ import org.hibernate.annotations.Type;
 @Table
 public class Notice {
 
-	@Column(name = "noticeId")
+	public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setHeading(String heading) {
+        this.heading = heading;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setLastModifiedBy(User lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
+    @Column(name = "noticeId")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;

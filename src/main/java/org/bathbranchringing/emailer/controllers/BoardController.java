@@ -6,19 +6,22 @@ import java.util.List;
 
 import org.bathbranchringing.emailer.core.domain.Board;
 import org.bathbranchringing.emailer.core.domain.Notice;
-import org.bathbranchringing.emailer.core.domain.Tower;
 import org.bathbranchringing.emailer.core.repo.GroupDAO;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
 import org.bathbranchringing.emailer.core.repo.TowerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping({"/towers/{boardId}", "/groups/{boardId}"})
-public class TowerController {
+public class BoardController {
     
     @Autowired
     private GroupDAO groupDAO;
@@ -147,12 +150,13 @@ public class TowerController {
         return page;
     }
 	
-	@RequestMapping("/notices/{year}/{month}/{day}/{noticeId}")
+	@RequestMapping(value = "/notices/{year}/{month}/{day}/{noticeId}")
 	public String noticePage(@PathVariable final String boardId,
                              @PathVariable final long year,
                              @PathVariable final long month,
                              @PathVariable final long day,
                              @PathVariable final long noticeId,
+                             @RequestParam(required = false, defaultValue = "false") final boolean edit,
 	                         final ModelMap model) {
         
         Board board = towerDAO.find(boardId);
@@ -169,7 +173,11 @@ public class TowerController {
         if (board != null) {
     		final Notice notice = noticeDAO.find(noticeId);
     		if ((notice != null) && (notice.getBoard().getId() == board.getId())) {
-    		    page = "/pages/notice";
+    		    if (edit) {
+    		        page = "/pages/editNotice";
+    		    } else {
+    		        page = "/pages/viewNotice";
+    		    }
     		    model.addAttribute("notice", notice);
     		}
         }

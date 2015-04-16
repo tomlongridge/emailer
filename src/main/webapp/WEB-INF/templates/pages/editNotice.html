@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="/fragments/header :: head(title=${notice.heading})"></head>
+
+<body>
+
+    <nav th:replace="/fragments/header :: navigation"></nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <div
+                th:replace="'/fragments/' + (${tower} ? 'tower' : 'group') + 'Navigation' :: navigation"></div>
+
+            <div class="col-md-9">
+
+                <form action="#" th:action="@{'/notices/' + ${notice.id}}" th:object="${notice}" method="post">
+
+                    <div class="form-group">
+                        <label for="heading">Heading</label>
+                        <input type="text" class="form-control" placeholder="Heading" th:field="*{heading}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea class="form-control" rows="10" th:field="*{content}"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" name="save">Save</button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <div th:include="/fragments/footer"></div>
+
+</body>
+
+</html>
