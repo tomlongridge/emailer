@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:include="/fragments/header :: head(title=${tower.displayName})"></head>
+<head th:include="/fragments/header :: head(title=${board.displayName})"></head>
 
 <body>
 
@@ -12,7 +12,7 @@
 
         <div class="row">
 
-            <div th:replace="/fragments/towerNavigation :: navigation"></div>
+            <div th:replace="/fragments/boardNavigation :: navigation"></div>
 
             <div class="col-md-9">
 
@@ -22,7 +22,7 @@
 					    <div class="thumbnail">
 					        <div class="caption">
 					            <h4>
-					            	<a th:href="@{/towers/{towerId}/notices/{date}/{noticeId}(towerId=${tower.identifier},date=${#calendars.format(notice.creationDate, 'yyyy/MM/dd')},noticeId=${notice.id})}"
+					            	<a th:href="@{/{boardType}/{boardId}/notices/{date}/{noticeId}(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier},date=${#calendars.format(notice.creationDate, 'yyyy/MM/dd')},noticeId=${notice.id})}"
 					            	   th:text="${notice.heading}"></a>
 					           	</h4>
 					            <p th:text="${notice.content}"></p>
@@ -31,14 +31,15 @@
                                         <img th:src="@{/img/externalLink.png}" alt="(external link)" title="(external link)" class="linkicon" />
                                         View
                                     </a>
-                                    <a th:unless="${notice.link}" th:href="@{/towers/{boardId}/notices/{date}/{noticeId}(boardId=${tower.identifier},date=${#calendars.format(notice.creationDate, 'yyyy/MM/dd')},noticeId=${notice.id})}">See more&hellip;</a>
+                                    <a th:unless="${notice.link}"
+                                       th:href="@{/{boardType}/{boardId}/notices/{date}/{noticeId}(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier},date=${#calendars.format(notice.creationDate, 'yyyy/MM/dd')},noticeId=${notice.id})}">See more&hellip;</a>
                                 </p>
 					        </div>
 					    </div>
 					</div>
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
-                        <a class="btn btn-default" th:href="@{/towers/{boardId}/notices/new(boardId=${tower.identifier})}">Create New Notice</a>
+                        <a class="btn btn-default" th:href="@{/towers/{boardId}/notices/new(boardId=${board.identifier})}">Create New Notice</a>
                     </div>
 
                 </div>

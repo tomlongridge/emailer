@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Board {
+public abstract class Board {
     
     @Column(name = "boardId")
 	@Id
@@ -44,10 +44,6 @@ public class Board {
     public List<Group> getAffiliatedTo() {
         return affiliatedTo;
     }
-    
-    public boolean isGroup() {
-        return false;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -60,5 +56,9 @@ public class Board {
     public void setAffiliatedTo(List<Group> affiliatedTo) {
         this.affiliatedTo = affiliatedTo;
     }
+    
+    public abstract boolean isGroup();
+    
+    public abstract String getDisplayName();
 
 }

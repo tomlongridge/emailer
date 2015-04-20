@@ -25,3 +25,8 @@ INSERT INTO Affiliates (affiliate, towerGroup) VALUE (@towerId, @groupId)
 
 INSERT INTO Notice (heading, content, board, createdBy, creationDate, lastModifiedBy, modificationDate) VALUE ('Test Notice', 'This is a longer version of the notice text', @towerId, @userId, current_timestamp(), @userId, current_timestamp());
 INSERT INTO Notice (heading, content, board, createdBy, creationDate, lastModifiedBy, modificationDate) VALUE ('Group Test Notice', 'Group This is a longer version of the notice text', @groupId, @userId, current_timestamp(), @userId, current_timestamp());
+
+INSERT INTO Notice (heading, content, board, createdBy, creationDate, lastModifiedBy, modificationDate) VALUE ('Test Event', 'This is a longer version of the event text', @towerId, @userId, current_timestamp(), @userId, current_timestamp());
+SET @eventId = LAST_INSERT_ID();
+
+INSERT INTO Event (noticeId, startDate, endDate) VALUES (@eventId, current_timestamp(), current_timestamp());

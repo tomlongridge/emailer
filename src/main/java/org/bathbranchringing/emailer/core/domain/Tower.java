@@ -68,20 +68,6 @@ public class Tower extends Board {
 	public short getTenorWeightLbs() {
 		return tenorWeightLbs;
 	}
-
-	public String getDisplayName() {
-		StringBuilder name = new StringBuilder();
-		if (dedication != null) {
-			name.append(dedication);
-			name.append(", "); 
-		}
-		if (area != null) {
-			name.append(area);
-			name.append(", "); 
-		}
-		name.append(town);
-		return name.toString();
-	}
 	
 	public String getTenorWeight() {
 		if ((tenorWeightLbs == 0) && (tenorWeightQtrs == 0)) {
@@ -90,5 +76,25 @@ public class Tower extends Board {
 			return String.format("%d-%d-%d", tenorWeightCwt, tenorWeightQtrs, tenorWeightLbs);
 		}
 	}
+	
+	@Override
+	public boolean isGroup() {
+	    return false;
+	}
+
+    @Override
+    public String getDisplayName() {
+        StringBuilder name = new StringBuilder();
+        if (dedication != null) {
+            name.append(dedication);
+            name.append(", "); 
+        }
+        if (area != null) {
+            name.append(area);
+            name.append(", "); 
+        }
+        name.append(town);
+        return name.toString();
+    }
 
 }

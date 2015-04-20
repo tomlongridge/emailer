@@ -10,13 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TowerDAO extends GenericDAO<Tower, Long> {
 
-	public Tower find(final String identifier) {
-		return (Tower) currentSession()
-				.createCriteria(Tower.class)
-				.add(Restrictions.eq("identifier", identifier))
-				.uniqueResult();
-	}
-
     @SuppressWarnings("unchecked")
     public List<Tower> search(final String searchString) {
         

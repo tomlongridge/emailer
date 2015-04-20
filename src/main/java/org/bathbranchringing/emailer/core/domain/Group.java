@@ -29,4 +29,9 @@ public class Group extends Board {
 	public boolean isGroup() {
 	    return true;
 	}
+	
+	@Override
+	public String getDisplayName() {
+	    return name;
+	}
 }

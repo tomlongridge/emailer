@@ -1,0 +1,29 @@
+<html>
+<body>
+    <div class="col-md-3" th:fragment="navigation">
+        <h3 th:unless="${board.group}" th:text="${board.displayName}"></h3>
+        <h4 th:unless="${board.group}">
+            <span th:text="${board.county.name}"></span>,
+            <span style="font-weight: bold" th:text="${board.numBells}"></span>,
+            <span th:text="${board.tenorWeight}"></span>
+        </h4>
+        <h3 th:if="${board.group}" th:text="${board.name}"></h3>
+        <div th:unless="${board.group}" class="list-group">
+            <a class="list-group-item"
+                th:href="@{/towers/{boardId}/notices(boardId=${board.identifier})}"
+                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'active' : ''}">Notices</a>
+            <a href="#" class="list-group-item">Diary</a>
+            <a href="#" class="list-group-item">Tower Information</a>
+            <a href="#" class="list-group-item">Contacts &amp; Members</a>
+        </div>
+        <div th:if="${board.group}" class="list-group">
+            <a class="list-group-item"
+                th:href="@{/groups/{boardId}/notices(boardId=${board.identifier})}"
+                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'active' : ''}">Notices</a>
+            <a href="#" class="list-group-item">Diary</a>
+            <a href="#" class="list-group-item">Group Information</a>
+            <a href="#" class="list-group-item">Contacts &amp; Members</a>
+        </div>
+    </div>
+</body>
+</html>
