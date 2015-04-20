@@ -40,6 +40,11 @@ body {
     color: #d17581;
 }
 
+.thumbnail img.linkicon {
+	display: inline-block;
+	width: initial;
+}
+
 .thumbnail {
     padding: 0;
 }

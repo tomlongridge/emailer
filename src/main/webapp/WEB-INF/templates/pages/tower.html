@@ -27,16 +27,18 @@
 					           	</h4>
 					            <p th:text="${notice.content}"></p>
 					            <p class="pull-right">
-					            	<a th:href="@{/towers/{boardId}/notices/{date}/{noticeId}(boardId=${tower.identifier},date=${#calendars.format(notice.creationDate, 'yyyy/MM/dd')},noticeId=${notice.id})}">See more&hellip;</a></p>
+					            	<a th:if="${notice.link}" th:href="${notice.link}" target="_blank">
+                                        <img th:src="@{/img/externalLink.png}" alt="(external link)" title="(external link)" class="linkicon" />
+                                        View
+                                    </a>
+                                    <a th:unless="${notice.link}" th:href="@{/towers/{boardId}/notices/{date}/{noticeId}(boardId=${tower.identifier},date=${#calendars.format(notice.creationDate, 'yyyy/MM/dd')},noticeId=${notice.id})}">See more&hellip;</a>
+                                </p>
 					        </div>
 					    </div>
 					</div>
 
                     <div class="col-sm-4 col-lg-4 col-md-4">
-                        <h4><a href="#">Like this template?</a>
-                        </h4>
-                        <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
-                        <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
+                        <a class="btn btn-default" th:href="@{/towers/{boardId}/notices/new(boardId=${tower.identifier})}">Create New Notice</a>
                     </div>
 
                 </div>

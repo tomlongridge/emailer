@@ -22,10 +22,24 @@
                         <p th:text="${notice.content}"></p>
                     </div>
                     <div class="ratings">
-                        <p class="pull-right" th:text="${notice.createdBy.displayName}"></p>
-                        <p th:with="df=#{datetime.format}" th:text="${#calendars.format(notice.creationDate, df)}"></p>
+                        <p class="pull-right">
+                            Last Modified: 
+                            <span th:text="${notice.lastModifiedBy.displayName}"></span>
+                            <span th:with="df=#{datetime.format}"
+                                  th:text="${#calendars.format(notice.modificationDate, df)}"></span>
+                            <br />
+                            Created: 
+                            <span th:text="${notice.createdBy.displayName}"></span>
+                            <span th:with="df=#{datetime.format}"
+                                  th:text="${#calendars.format(notice.creationDate, df)}"></span>
+                        </p>
+                        <p>
+                            <br clear="right" />
+                        </p>
                     </div>
                 </div>
+                
+                <a href="?edit=1" class="btn btn-default">Edit</a>
 
             </div>
 

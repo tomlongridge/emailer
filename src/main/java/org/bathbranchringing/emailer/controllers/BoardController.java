@@ -57,6 +57,27 @@ public class BoardController {
 		return page;
 	}
     
+    @RequestMapping("/notices/new")
+    public String newNotice(@PathVariable final String boardId,
+                              final ModelMap model) {
+        
+        Board board = towerDAO.find(boardId);
+        if (board != null) {
+            model.addAttribute("tower", board);
+        } else {
+            board = groupDAO.find(boardId);
+            if (board != null) {
+                model.addAttribute("group", board);
+            }
+        }
+        
+        Notice notice = new Notice();
+        notice.setBoard(board);
+        model.addAttribute("notice", notice);
+        
+        return "/pages/editNotice";
+    }
+    
     @RequestMapping("/notices/{year}")
     public String noticesPage(@PathVariable final String boardId,
                               @PathVariable final int year,

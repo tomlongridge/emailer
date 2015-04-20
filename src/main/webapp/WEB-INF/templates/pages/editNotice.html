@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:include="/fragments/header :: head(title=${notice.heading})"></head>
+<head th:include="/fragments/header :: head(title=${notice.heading} ?: 'New Notice')"></head>
 
 <body>
 
@@ -17,7 +17,9 @@
 
             <div class="col-md-9">
 
-                <form action="#" th:action="@{'/notices/' + ${notice.id}}" th:object="${notice}" method="post">
+                <form action="#" th:action="@{'/notices/'} + (${notice.id} ?: '')" th:object="${notice}" method="post">
+                
+                    <input type="hidden" th:field="*{board.id}" />
 
                     <div class="form-group">
                         <label for="heading">Heading</label>
@@ -26,6 +28,26 @@
                     <div class="form-group">
                         <label for="content">Content</label>
                         <textarea class="form-control" rows="10" th:field="*{content}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="heading">Link</label>
+                        <input type="text" class="form-control" placeholder="http://example/url" th:field="*{link}" />
+                    </div>
+                    <div class="form-group" th:if="${notice.id}">
+                        <label class="control-label">Created</label>
+                        <p class="form-control-static">
+                            <span th:text="${notice.createdBy.displayName}"></span>,
+                            <span th:with="df=#{datetime.format}"
+                                  th:text="${#calendars.format(notice.creationDate, df)}"></span>
+                        </p>
+                    </div>
+                    <div class="form-group" th:if="${notice.id}">
+                        <label class="control-label">Last Modified</label>
+                        <p class="form-control-static">
+                            <span th:text="${notice.lastModifiedBy.displayName}"></span>,
+                            <span th:with="df=#{datetime.format}"
+                                  th:text="${#calendars.format(notice.modificationDate, df)}"></span>
+                        </p>
                     </div>
                     
                     <button type="submit" class="btn btn-primary" name="save">Save</button>

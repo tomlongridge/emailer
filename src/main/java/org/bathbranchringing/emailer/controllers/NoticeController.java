@@ -1,8 +1,12 @@
 package org.bathbranchringing.emailer.controllers;
 
+import java.util.Date;
+
 import org.bathbranchringing.emailer.core.domain.Notice;
+import org.bathbranchringing.emailer.core.domain.User;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -30,8 +34,25 @@ public class NoticeController {
                              noticeId);
 	}
     
+    @RequestMapping(value = {"", "/"}, method = RequestMethod.POST)
+    public String newNotice(@ModelAttribute("notice") final Notice notice,
+                            final BindingResult bindingResult,
+                            final ModelMap model) {
+        
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        notice.setCreatedBy(user);
+        notice.setCreationDate(new Date());
+        notice.setLastModifiedBy(user);
+        notice.setModificationDate(notice.getCreationDate());
+        
+        final Long id = noticeDAO.add(notice);
+        return "redirect:/notices/" + id; 
+        
+    }
+    
     @RequestMapping(value = "/{noticeId}", method = RequestMethod.POST)
-    public String noticePage(@PathVariable final long noticeId,
+    public String editNotice(@PathVariable final long noticeId,
                              @ModelAttribute("notice") final Notice notice,
                              final BindingResult bindingResult,
                              final ModelMap model) {
@@ -39,6 +60,7 @@ public class NoticeController {
         final Notice originalNotice = noticeDAO.find(noticeId);
         originalNotice.setHeading(notice.getHeading());
         originalNotice.setContent(notice.getContent());
+        originalNotice.setLink(notice.getLink());
         noticeDAO.update(originalNotice);
         return "redirect:/notices/" + noticeId; 
     }

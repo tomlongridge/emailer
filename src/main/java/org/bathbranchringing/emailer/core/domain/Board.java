@@ -18,11 +18,11 @@ import javax.persistence.Table;
 @Table
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Board {
-
-	@Column(name = "boardId")
+    
+    @Column(name = "boardId")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
     @Column(nullable = false, length = 50, unique = true)
     private String identifier;
@@ -33,7 +33,7 @@ public class Board {
 	           inverseJoinColumns = @JoinColumn(name = "towerGroup"))
 	private List<Group> affiliatedTo;
 	
-    public long getId() {
+    public Long getId() {
 		return id;
 	}
     
@@ -47,6 +47,18 @@ public class Board {
     
     public boolean isGroup() {
         return false;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public void setAffiliatedTo(List<Group> affiliatedTo) {
+        this.affiliatedTo = affiliatedTo;
     }
 
 }

@@ -28,8 +28,9 @@ public class GenericDAO<E, K extends Serializable> {
         return sessionFactory.getCurrentSession();
     }
 
-    public void add(E entity) {
-        currentSession().save(entity);
+    @SuppressWarnings("unchecked")
+    public K add(E entity) {
+        return (K) currentSession().save(entity);
     }
 
     public void update(E entity) {

@@ -1,17 +1,27 @@
 package org.bathbranchringing.emailer.core.domain;
 
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table
-public class User {
+public class User implements UserDetails {
 
-	@Column(name = "userId")
+    private static final long serialVersionUID = -8767822713228805716L;
+
+    @Column(name = "userId")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -30,6 +40,9 @@ public class User {
 	
 	@Column
 	private boolean enabled;
+	
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	private List<UserRole> roles;
 	
 	public long getId() {
 		return id;
@@ -58,4 +71,29 @@ public class User {
     public String getDisplayName() {
 		return String.format("%s %s", firstName, surname);
 	}
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return emailAddress;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return enabled;
+    }
 }

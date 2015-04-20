@@ -9,11 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+
 @Entity
 @Table
-public class UserRole {
+public class UserRole implements GrantedAuthority {
 
-	@Column(name = "userRoleId")
+    private static final long serialVersionUID = -5296383611739147502L;
+
+    @Column(name = "userRoleId")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -34,6 +38,11 @@ public class UserRole {
     }
 
     public String getRole() {
+        return role;
+    }
+
+    @Override
+    public String getAuthority() {
         return role;
     }
 	

@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -18,11 +19,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
     
     @Autowired
+    private UserDetailsService userDAO;
+    
+    @Autowired
     public void configure(final AuthenticationManagerBuilder builder) throws Exception {
-        builder.jdbcAuthentication()
-            .dataSource(dataSource)
-            .usersByUsernameQuery("select emailAddress, password, enabled from User where emailAddress = ?")
-            .authoritiesByUsernameQuery("select User.emailAddress, UserRole.role from UserRole, User where UserRole.userId = User.userId and User.emailAddress = ?");
+        builder.userDetailsService(userDAO);
     }
     
     @Override

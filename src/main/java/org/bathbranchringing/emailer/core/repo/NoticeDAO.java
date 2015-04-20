@@ -23,7 +23,7 @@ public class NoticeDAO extends GenericDAO<Notice, Long> {
     public List<Notice> getBoardNotices(final Board board, final Date dateFrom, final Date dateTo) {
         return currentSession()
                 .createCriteria(Notice.class)
-                .add(Restrictions.eq("tower.id", board.getId()))
+                .add(Restrictions.eq("board.id", board.getId()))
                 .add(Restrictions.gt("creationDate", dateFrom))
                 .add(Restrictions.lt("creationDate", dateTo))
                 .list();
