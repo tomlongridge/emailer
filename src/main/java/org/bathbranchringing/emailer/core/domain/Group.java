@@ -25,12 +25,10 @@ public class Group extends Board {
         return affiliates;
     }
 	
-	@Override
 	public boolean isGroup() {
 	    return true;
 	}
 	
-	@Override
 	public String getDisplayName() {
 	    return name;
 	}

@@ -8,20 +8,15 @@
             <span th:text="${board.tenorWeight}"></span>
         </h4>
         <h3 th:if="${board.group}" th:text="${board.name}"></h3>
-        <div th:unless="${board.group}" class="list-group">
+        <div class="list-group">
             <a class="list-group-item"
-                th:href="@{/towers/{boardId}/notices(boardId=${board.identifier})}"
+                th:href="@{/{boardType}/{boardId}/notices(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}"
                 th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'active' : ''}">Notices</a>
-            <a href="#" class="list-group-item">Diary</a>
-            <a href="#" class="list-group-item">Tower Information</a>
-            <a href="#" class="list-group-item">Contacts &amp; Members</a>
-        </div>
-        <div th:if="${board.group}" class="list-group">
             <a class="list-group-item"
-                th:href="@{/groups/{boardId}/notices(boardId=${board.identifier})}"
-                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'active' : ''}">Notices</a>
-            <a href="#" class="list-group-item">Diary</a>
-            <a href="#" class="list-group-item">Group Information</a>
+                th:href="@{/{boardType}/{boardId}/diary(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}"
+                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/diary')) ? 'active' : ''}">Diary</a>
+            <a href="#" class="list-group-item" th:if="${board.group}">Tower Information</a>
+            <a href="#" class="list-group-item" th:unless="${board.group}">Group Information</a>
             <a href="#" class="list-group-item">Contacts &amp; Members</a>
         </div>
     </div>

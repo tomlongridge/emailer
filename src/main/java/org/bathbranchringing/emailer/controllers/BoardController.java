@@ -22,9 +22,6 @@ public class BoardController {
     @Autowired
     private BoardDAO boardDAO;
     
-    @Autowired
-    private BoardDAO groupDAO;
-	
 	@Autowired
 	private NoticeDAO noticeDAO;
 	
@@ -73,9 +70,9 @@ public class BoardController {
         model.addAttribute("board", board);
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
-        dateFrom.set(year, 1, 1, 0, 0, 0);
+        dateFrom.set(year, Calendar.JANUARY, 1, 0, 0, 0);
         final Calendar dateTo = GregorianCalendar.getInstance();
-        dateTo.set(year + 1, 1, 1, 0, 0, 0);
+        dateTo.set(year + 1, Calendar.JANUARY, 1, 0, 0, 0);
         final List<Notice> notice = noticeDAO.getBoardNotices(board, dateFrom.getTime(), dateTo.getTime());
         model.addAttribute("notices", notice);
 

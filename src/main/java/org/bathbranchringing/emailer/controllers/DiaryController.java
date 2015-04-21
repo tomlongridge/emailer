@@ -1,68 +1,172 @@
 package org.bathbranchringing.emailer.controllers;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
-import org.bathbranchringing.emailer.core.domain.Notice;
-import org.bathbranchringing.emailer.core.domain.User;
-import org.bathbranchringing.emailer.core.repo.NoticeDAO;
+import org.bathbranchringing.emailer.core.domain.Board;
+import org.bathbranchringing.emailer.core.domain.Event;
+import org.bathbranchringing.emailer.core.repo.BoardDAO;
+import org.bathbranchringing.emailer.core.repo.EventDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/events")
+@RequestMapping({"/towers/{boardId}/diary", "/groups/{boardId}/diary"})
 public class DiaryController {
-	
+    
+    @Autowired
+    private BoardDAO boardDAO;
+    
 	@Autowired
-	private NoticeDAO noticeDAO;
+	private EventDAO eventDAO;
 	
-	@RequestMapping("/{noticeId}")
-	public String viewNotice(@PathVariable final long noticeId) {
+	@RequestMapping({"", "/"})
+	public String diaryPage(@PathVariable final String boardId,
+                            final ModelMap model) {
 		
-	    final Notice notice = noticeDAO.find(noticeId);
-	    
-	    return String.format("redirect:/%1$s/%2$s/notices/%3$tY/%3$tm/%3$td/%4$d",
-	                         notice.getBoard().isGroup() ? "groups" : "towers",
-	                         notice.getBoard().getIdentifier(),
-                             notice.getCreationDate(),
-                             noticeId);
+		final Board board = boardDAO.find(boardId);
+		if (board == null) {
+		    return "redirect:/home";
+		}
+		model.addAttribute("board", board);
+		
+		final Calendar dateFrom = GregorianCalendar.getInstance();
+        dateFrom.set(Calendar.DAY_OF_MONTH, 1);
+        dateFrom.set(Calendar.HOUR_OF_DAY, 0);
+        dateFrom.set(Calendar.MINUTE, 0);
+        dateFrom.set(Calendar.SECOND, 0);
+        dateFrom.set(Calendar.MILLISECOND, 0);
+        final Calendar dateTo = (Calendar) dateFrom.clone();
+        dateTo.add(Calendar.MONTH, 1);
+        final List<Event> diary = eventDAO.getDiary(board, dateFrom.getTime(), dateTo.getTime());
+		model.addAttribute("diary", diary);
+		
+		model.addAttribute("title", String.format("%1$tB %1$tY", dateFrom));
+		
+		return "/pages/diary";
 	}
     
-    @RequestMapping(value = {"", "/"}, method = RequestMethod.POST)
-    public String newNotice(@ModelAttribute("notice") final Notice notice,
-                            final BindingResult bindingResult,
-                            final ModelMap model) {
-        
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        
-        notice.setCreatedBy(user);
-        notice.setCreationDate(new Date());
-        notice.setLastModifiedBy(user);
-        notice.setModificationDate(notice.getCreationDate());
-        
-        final Long id = noticeDAO.add(notice);
-        return "redirect:/notices/" + id; 
-        
-    }
-    
-    @RequestMapping(value = "/{noticeId}", method = RequestMethod.POST)
-    public String editNotice(@PathVariable final long noticeId,
-                             @ModelAttribute("notice") final Notice notice,
-                             final BindingResult bindingResult,
+    @RequestMapping("/{year}")
+    public String eventsPage(@PathVariable final String boardId,
+                             @PathVariable final int year,
                              final ModelMap model) {
         
-        final Notice originalNotice = noticeDAO.find(noticeId);
-        originalNotice.setHeading(notice.getHeading());
-        originalNotice.setContent(notice.getContent());
-        originalNotice.setLink(notice.getLink());
-        noticeDAO.update(originalNotice);
-        return "redirect:/notices/" + noticeId; 
+        final Board board = boardDAO.find(boardId);
+        if (board == null) {
+            return "redirect:/home";
+        }
+        model.addAttribute("board", board);
+        
+        final Calendar dateFrom = GregorianCalendar.getInstance();
+        dateFrom.set(year, Calendar.JANUARY, 1, 0, 0, 0);
+        final Calendar dateTo = GregorianCalendar.getInstance();
+        dateTo.set(year + 1, Calendar.JANUARY, 1, 0, 0, 0);
+        final List<Event> diary = eventDAO.getDiary(board, dateFrom.getTime(), dateTo.getTime());
+        model.addAttribute("diary", diary);
+        
+        model.addAttribute("title", String.format("%1$tY", dateFrom));
+
+        return "/pages/board";
+    }
+    
+    @RequestMapping("/{year}/{month}")
+    public String eventsPage(@PathVariable final String boardId,
+                             @PathVariable final int year,
+                             @PathVariable final int month,
+                             final ModelMap model) {
+        
+        final Board board = boardDAO.find(boardId);
+        if (board == null) {
+            return "redirect:/home";
+        }
+        model.addAttribute("board", board);
+
+        final Calendar dateFrom = GregorianCalendar.getInstance();
+        dateFrom.set(year, month - 1, 1, 0, 0, 0);
+        final Calendar dateTo = GregorianCalendar.getInstance();
+        dateTo.set(year, month, 1, 0, 0, 0);
+        final List<Event> diary = eventDAO.getDiary(board, dateFrom.getTime(), dateTo.getTime());
+        model.addAttribute("diary", diary);
+
+        model.addAttribute("title", String.format("%1$tB %1$tY", dateFrom));
+        
+        return "/pages/board";
+    }
+    
+    @RequestMapping("/{year}/{month}/{day}")
+    public String eventsPage(@PathVariable final String boardId,
+                             @PathVariable final int year,
+                             @PathVariable final int month,
+                             @PathVariable final int day,
+                             final ModelMap model) {
+        
+        final Board board = boardDAO.find(boardId);
+        if (board == null) {
+            return "redirect:/home";
+        }
+        model.addAttribute("board", board);
+
+        final Calendar dateFrom = GregorianCalendar.getInstance();
+        dateFrom.set(year, month - 1, day, 0, 0, 0);
+        final Calendar dateTo = GregorianCalendar.getInstance();
+        dateTo.set(year, month - 1, day + 1, 0, 0, 0);
+        final List<Event> diary = eventDAO.getDiary(board, dateFrom.getTime(), dateTo.getTime());
+        model.addAttribute("diary", diary);
+        
+        model.addAttribute("title", String.format("%1$te %1$tB %1$tY", dateFrom));
+
+        return "/pages/board";
+    }
+	
+	@RequestMapping(value = "/{year}/{month}/{day}/{noticeId}")
+	public String eventPage(@PathVariable final String boardId,
+                            @PathVariable final long year,
+                            @PathVariable final long month,
+                            @PathVariable final long day,
+                            @PathVariable final long noticeId,
+                            @RequestParam(required = false, defaultValue = "false") final boolean edit,
+	                        final ModelMap model) {
+        
+        final Board board = boardDAO.find(boardId);
+        if (board == null) {
+            return "redirect:/home";
+        }
+        model.addAttribute("board", board);
+        
+		final Event event = eventDAO.find(noticeId);
+		if ((event == null) || (event.getBoard().getId() != board.getId())) {
+            return "redirect:/home";
+		}
+		
+		model.addAttribute("event", event);
+	    if (edit) {
+	        return "/pages/editEvent";
+	    } else {
+	        return "/pages/viewEvent";
+	    }
+		
+	}
+    
+    @RequestMapping("/new")
+    public String newEvent(@PathVariable final String boardId,
+                           final ModelMap model) {
+        
+        final Board board = boardDAO.find(boardId);
+        if (board == null) {
+            return "redirect:/home";
+        }
+        model.addAttribute("board", board);
+        
+        Event event = new Event();
+        event.setBoard(board);
+        model.addAttribute("event", event);
+        
+        return "/pages/editEvent";
     }
 	
 }

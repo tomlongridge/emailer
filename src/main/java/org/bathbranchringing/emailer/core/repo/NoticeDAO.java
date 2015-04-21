@@ -16,6 +16,7 @@ public class NoticeDAO extends GenericDAO<Notice, Long> {
         return currentSession()
         		.createCriteria(Notice.class)
         		.add(Restrictions.eq("board.id", board.getId()))
+        		.add(Restrictions.isNull("startDate"))
         		.list();
     }
 
@@ -26,6 +27,7 @@ public class NoticeDAO extends GenericDAO<Notice, Long> {
                 .add(Restrictions.eq("board.id", board.getId()))
                 .add(Restrictions.gt("creationDate", dateFrom))
                 .add(Restrictions.lt("creationDate", dateTo))
+                .add(Restrictions.isNull("startDate"))
                 .list();
     }
 

@@ -77,12 +77,10 @@ public class Tower extends Board {
 		}
 	}
 	
-	@Override
 	public boolean isGroup() {
 	    return false;
 	}
 
-    @Override
     public String getDisplayName() {
         StringBuilder name = new StringBuilder();
         if (dedication != null) {
