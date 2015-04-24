@@ -71,7 +71,7 @@ public class DiaryController {
         
         model.addAttribute("title", String.format("%1$tY", dateFrom));
 
-        return "/pages/board";
+        return "/pages/diary";
     }
     
     @RequestMapping("/{year}/{month}")
@@ -95,7 +95,7 @@ public class DiaryController {
 
         model.addAttribute("title", String.format("%1$tB %1$tY", dateFrom));
         
-        return "/pages/board";
+        return "/pages/diary";
     }
     
     @RequestMapping("/{year}/{month}/{day}")
@@ -120,7 +120,7 @@ public class DiaryController {
         
         model.addAttribute("title", String.format("%1$te %1$tB %1$tY", dateFrom));
 
-        return "/pages/board";
+        return "/pages/diary";
     }
 	
 	@RequestMapping(value = "/{year}/{month}/{day}/{noticeId}")

@@ -36,8 +36,14 @@
                             <td><span th:text="${event.heading}"></span></td>
                             <td><span th:with="df=#{time.format}" th:text="${#calendars.format({event.startDate}, df)}"></span></td>
                             <td>
-                                <a class="btn btn-primary pull-right"
-                                   href="#">View</a>
+                                <a th:if="${event.link}" th:href="${event.link}" target="_blank" class="btn btn-primary pull-right">
+                                    <img th:src="@{/img/externalLink.png}" alt="(external link)" title="(external link)" class="linkicon" />
+                                    View
+                                </a>
+                                <a th:unless="${event.link}" class="btn btn-primary pull-right"
+                                   th:href="@{/{boardType}/{boardId}/notices/{date}/{noticeId}(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier},date=${#calendars.format(event.creationDate, 'yyyy/MM/dd')},noticeId=${event.id})}">
+                                   View
+                                </a>
                             </td>
                         </tr>
 
