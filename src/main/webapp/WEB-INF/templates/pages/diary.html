@@ -16,41 +16,61 @@
 
             <div class="col-md-9">
             
-                <h4 th:text="${title}"></h4>
+                <div th:each="year : ${diary}">
+                
+                    <div th:each="month : ${year.value}">
+                
+                        <h4 th:with="df=#{month.format}"
+                            th:text="${#calendars.format(#calendars.create(year.key, month.key + 1, 1), df)}"></h4>
+        
+                        <table class="table table-striped">
+        
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2">Date</th>
+                                    <th class="col-md-6">Event</th>
+                                    <th class="col-md-2">Time</th>
+                                    <th class="col-md-2"></th>
+                                </tr>
+                            </thead>
+        
+                            <tbody>
+        
+                                <tr th:each="event : ${month.value}">
+                                    <td>
+                                        <span th:with="df=#{date.format}" th:text="${#calendars.format({event.startDate}, df)}"></span>
+                                        <span th:with="df=#{date.format}"
+                                              th:if="${#dates.day({event.startDate}) != #dates.day({event.endDate})}"
+                                              th:text="${' - ' + #calendars.format({event.endDate}, df)}"></span>
+                                    </td>
+                                    <td><span th:text="${event.heading}"></span></td>
+                                    <td>
+                                        <span th:with="df=#{time.format}"
+                                              th:unless="${#dates.day({event.startDate}) != #dates.day({event.endDate})}"
+                                              th:text="${#calendars.format({event.endDate}, df)}"></span>
+                                    </td>
+                                    <td>
+                                        <a th:if="${event.link}" th:href="${event.link}" target="_blank" class="btn btn-primary pull-right">
+                                            <img th:src="@{/img/externalLink.png}" alt="(external link)" title="(external link)" class="linkicon" />
+                                            View
+                                        </a>
+                                        <a th:unless="${event.link}" class="btn btn-primary pull-right"
+                                           th:href="@{/{boardType}/{boardId}/diary/{date}/{noticeId}(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier},date=${#calendars.format(event.creationDate, 'yyyy/MM/dd')},noticeId=${event.id})}">
+                                           View
+                                        </a>
+                                    </td>
+                                </tr>
+        
+                            </tbody>
+        
+                        </table>
 
-                <table class="table table-striped">
+                    
+                    </div>
+                    
+                </div>
 
-                    <thead>
-                        <tr>
-                            <th class="col-md-2">Date</th>
-                            <th class="col-md-6">Event</th>
-                            <th class="col-md-2">Time</th>
-                            <th class="col-md-2"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        <tr th:each="event : ${diary}">
-                            <td><span th:with="df=#{date.format}" th:text="${#calendars.format({event.startDate}, df)}"></span></td>
-                            <td><span th:text="${event.heading}"></span></td>
-                            <td><span th:with="df=#{time.format}" th:text="${#calendars.format({event.startDate}, df)}"></span></td>
-                            <td>
-                                <a th:if="${event.link}" th:href="${event.link}" target="_blank" class="btn btn-primary pull-right">
-                                    <img th:src="@{/img/externalLink.png}" alt="(external link)" title="(external link)" class="linkicon" />
-                                    View
-                                </a>
-                                <a th:unless="${event.link}" class="btn btn-primary pull-right"
-                                   th:href="@{/{boardType}/{boardId}/notices/{date}/{noticeId}(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier},date=${#calendars.format(event.creationDate, 'yyyy/MM/dd')},noticeId=${event.id})}">
-                                   View
-                                </a>
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
+                <a class="btn btn-default" th:href="@{/towers/{boardId}/events/new(boardId=${board.identifier})}">Create New Event</a>
             </div>
 
         </div>

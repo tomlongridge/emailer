@@ -1,14 +1,18 @@
 package org.bathbranchringing.emailer.controllers;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.bathbranchringing.emailer.core.domain.Board;
 import org.bathbranchringing.emailer.core.domain.Event;
 import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.EventDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping({"/towers/{boardId}/diary", "/groups/{boardId}/diary"})
 public class DiaryController {
+    
+    @Value("${diary.numMonths}")
+    private String numMonthsInDiaryView;
     
     @Autowired
     private BoardDAO boardDAO;
@@ -42,11 +49,25 @@ public class DiaryController {
         dateFrom.set(Calendar.SECOND, 0);
         dateFrom.set(Calendar.MILLISECOND, 0);
         final Calendar dateTo = (Calendar) dateFrom.clone();
-        dateTo.add(Calendar.MONTH, 1);
-        final List<Event> diary = eventDAO.getDiary(board, dateFrom.getTime(), dateTo.getTime());
+        dateTo.add(Calendar.MONTH, Integer.valueOf(numMonthsInDiaryView));
+        
+        final SortedMap<Long, SortedMap<Long, List<Event>>> diary = new TreeMap<Long, SortedMap<Long, List<Event>>>();
+        for (Event event : eventDAO.getDiary(board, dateFrom.getTime(), dateTo.getTime())) {
+            
+            final Long yearKey = Long.valueOf(dateFrom.get(Calendar.YEAR));
+            if (!diary.containsKey(yearKey)) {
+                diary.put(yearKey, new TreeMap<Long, List<Event>>());
+            }
+            
+            final Long monthKey = Long.valueOf(dateFrom.get(Calendar.MONTH));
+            if (!diary.get(yearKey).containsKey(monthKey)) {
+                diary.get(yearKey).put(monthKey, new ArrayList<Event>());
+            }
+            
+            diary.get(yearKey).get(monthKey).add(event);
+        }
+        
 		model.addAttribute("diary", diary);
-		
-		model.addAttribute("title", String.format("%1$tB %1$tY", dateFrom));
 		
 		return "/pages/diary";
 	}
@@ -143,7 +164,7 @@ public class DiaryController {
             return "redirect:/home";
 		}
 		
-		model.addAttribute("event", event);
+		model.addAttribute("notice", event);
 	    if (edit) {
 	        return "/pages/editEvent";
 	    } else {
@@ -164,7 +185,7 @@ public class DiaryController {
         
         Event event = new Event();
         event.setBoard(board);
-        model.addAttribute("event", event);
+        model.addAttribute("notice", event);
         
         return "/pages/editEvent";
     }

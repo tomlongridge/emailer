@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <div class="ratings" th:fragment="dates">
+        <p class="pull-right">
+            Last Modified: 
+            <span th:text="${notice.lastModifiedBy.displayName}"></span>
+            <span th:with="df=#{datetime.format}"
+                  th:text="${#calendars.format(notice.modificationDate, df)}"></span>
+            <br />
+            Created: 
+            <span th:text="${notice.createdBy.displayName}"></span>
+            <span th:with="df=#{datetime.format}"
+                  th:text="${#calendars.format(notice.creationDate, df)}"></span>
+        </p>
+        <p>
+            <br clear="right" />
+        </p>
+    </div>
+
+</html>

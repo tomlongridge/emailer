@@ -29,4 +29,4 @@ INSERT INTO Notice (heading, content, board, createdBy, creationDate, lastModifi
 INSERT INTO Notice (heading, content, board, createdBy, creationDate, lastModifiedBy, modificationDate) VALUE ('Test Event', 'This is a longer version of the event text', @towerId, @userId, current_timestamp(), @userId, current_timestamp());
 SET @eventId = LAST_INSERT_ID();
 
-INSERT INTO Event (noticeId, startDate, endDate) VALUES (@eventId, current_timestamp(), current_timestamp());
+INSERT INTO Event (noticeId, startDate, endDate) VALUES (@eventId, current_timestamp(), DATE_ADD(current_timestamp(), INTERVAL 1 DAY));

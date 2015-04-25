@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bathbranchringing.emailer.core.domain.Board;
 import org.bathbranchringing.emailer.core.domain.Event;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +27,7 @@ public class EventDAO extends GenericDAO<Event, Long> {
                                 Restrictions.lt("endDate", dateTo)
                         )
                 ))
+                .addOrder(Order.asc("startDate"))
                 .list();
     }
 

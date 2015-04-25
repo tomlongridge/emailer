@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:include="/fragments/header :: head(title=${notice.heading} ?: 'New Notice')"></head>
+<head th:include="/fragments/header :: head(title=${notice.heading} ?: 'New Event')"></head>
 
 <body>
 
@@ -16,9 +16,19 @@
 
             <div class="col-md-9">
 
-                <form action="#" th:action="@{'/notices/'} + (${notice.id} ?: '')" th:object="${notice}" method="post">
+                <form action="#" th:action="@{'/events/'} + (${notice.id} ?: '')" th:object="${notice}" method="post">
                 
                     <div th:replace="/fragments/editNoticeFields :: fields"></div>
+                    
+                    <div class="form-group">
+                        <label for="heading">Start Date</label>
+                        <input type="text" class="form-control" placeholder="20/06/2015" th:field="*{startDate}" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="heading">End Date</label>
+                        <input type="text" class="form-control" placeholder="20/06/2015" th:field="*{endDate}" />
+                    </div>
 
                     <div th:replace="/fragments/editNoticeFields :: dates"></div>
                     

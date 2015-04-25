@@ -21,6 +21,20 @@
                     <div class="caption-full">
                         <h3 th:text="${notice.heading}"></h3>
                         <p th:text="${notice.content}"></p>
+                        <div class="form-group">
+                            <label class="control-label">Start Date</label>
+                            <p class="form-control-static">
+                                <span th:with="df=#{datetime.format}"
+                                      th:text="${#calendars.format(notice.startDate, df)}"></span>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">End Date</label>
+                            <p class="form-control-static">
+                                <span th:with="df=#{datetime.format}"
+                                      th:text="${#calendars.format(notice.endDate, df)}"></span>
+                            </p>
+                        </div>
                     </div>
                     <div th:replace="/fragments/viewNoticePanels :: dates"></div>
                 </div>

@@ -41,23 +41,6 @@ public class BoardController {
 		return "/pages/board";
 	}
     
-    @RequestMapping("/notices/new")
-    public String newNotice(@PathVariable final String boardId,
-                              final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
-        if (board == null) {
-            return "redirect:/home";
-        }
-        model.addAttribute("board", board);
-        
-        Notice notice = new Notice();
-        notice.setBoard(board);
-        model.addAttribute("notice", notice);
-        
-        return "/pages/editNotice";
-    }
-    
     @RequestMapping("/notices/{year}")
     public String noticesPage(@PathVariable final String boardId,
                               @PathVariable final int year,
@@ -152,5 +135,22 @@ public class BoardController {
 	    }
 		
 	}
+    
+    @RequestMapping("/notices/new")
+    public String newNotice(@PathVariable final String boardId,
+                              final ModelMap model) {
+        
+        final Board board = boardDAO.find(boardId);
+        if (board == null) {
+            return "redirect:/home";
+        }
+        model.addAttribute("board", board);
+        
+        Notice notice = new Notice();
+        notice.setBoard(board);
+        model.addAttribute("notice", notice);
+        
+        return "/pages/editNotice";
+    }
 	
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <div th:fragment="fields">
+
+        <input type="hidden" th:field="*{board.id}" />
+
+        <div class="form-group">
+            <label for="heading">Heading</label>
+            <input type="text" class="form-control" placeholder="Heading" th:field="*{heading}" />
+        </div>
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea class="form-control" rows="10" th:field="*{content}"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="heading">Link</label>
+            <input type="text" class="form-control" placeholder="http://example/url" th:field="*{link}" />
+        </div>
+        
+    </div>
+    
+    <div th:fragment="dates">
+
+        <div class="form-group" th:if="${notice.id}">
+            <label class="control-label">Created</label>
+            <p class="form-control-static">
+                <span th:text="${notice.createdBy.displayName}"></span>,
+                <span th:with="df=#{datetime.format}"
+                      th:text="${#calendars.format(notice.creationDate, df)}"></span>
+            </p>
+        </div>
+        <div class="form-group" th:if="${notice.id}">
+            <label class="control-label">Last Modified</label>
+            <p class="form-control-static">
+                <span th:text="${notice.lastModifiedBy.displayName}"></span>,
+                <span th:with="df=#{datetime.format}"
+                      th:text="${#calendars.format(notice.modificationDate, df)}"></span>
+            </p>
+        </div>
+        
+    </div>
+
+</html>
