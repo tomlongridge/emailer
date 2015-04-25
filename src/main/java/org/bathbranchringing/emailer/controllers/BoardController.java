@@ -166,8 +166,9 @@ public class BoardController {
         if (board == null) {
             return "redirect:/home";
         }
-        
+
         Hibernate.initialize(board.getAffiliatedTo());
+        Hibernate.initialize(board.getCommittee());
         
         model.addAttribute("board", board);
         

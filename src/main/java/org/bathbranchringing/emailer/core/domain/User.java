@@ -40,9 +40,12 @@ public class User implements UserDetails {
 	
 	@Column
 	private boolean enabled;
-	
-	@OneToMany(mappedBy = "user")
-	private List<UserRole> roles;
+    
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> roles;
+    
+    @OneToMany(mappedBy = "user")
+    private List<CommitteeMember> committees;
 	
 	public long getId() {
 		return id;
@@ -71,6 +74,10 @@ public class User implements UserDetails {
     public String getDisplayName() {
 		return String.format("%s %s", firstName, surname);
 	}
+    
+    public List<CommitteeMember> getCommittees() {
+        return committees;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

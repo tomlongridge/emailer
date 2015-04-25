@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -33,6 +34,9 @@ public class Board {
 	           joinColumns = @JoinColumn(name = "affiliate"),
 	           inverseJoinColumns = @JoinColumn(name = "towerGroup"))
 	private List<Group> affiliatedTo;
+    
+    @OneToMany(mappedBy = "board")
+    private List<CommitteeMember> committee;
 	
     public Long getId() {
 		return id;
@@ -45,6 +49,10 @@ public class Board {
     public List<Group> getAffiliatedTo() {
         return affiliatedTo;
     }
+    
+    public List<CommitteeMember> getCommittee() {
+        return committee;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -56,6 +64,10 @@ public class Board {
 
     public void setAffiliatedTo(List<Group> affiliatedTo) {
         this.affiliatedTo = affiliatedTo;
+    }
+    
+    public void setCommittee(List<CommitteeMember> committee) {
+        this.committee = committee;
     }
     
     public boolean isGroup() {

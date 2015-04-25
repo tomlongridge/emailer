@@ -16,6 +16,8 @@ SET @towerId = LAST_INSERT_ID();
 
 INSERT INTO Tower (boardId, dedication, area, town, county, numBells, tenorWeightCwt, tenorWeightQtrs, tenorWeightLbs) VALUE (@towerId, 'St Mary the Virgin', 'Bathwick', 'Bath', @countyId, 10, 18, 3, 20);
 
+INSERT INTO CommitteeMember (role, boardId, userId) VALUE ('Tower Master', @towerId, @userId);
+
 INSERT INTO Board (identifier) VALUE ('BathBranch');
 SET @groupId = LAST_INSERT_ID();
 INSERT INTO `Group` (boardId, name) VALUE (@groupId, 'Bath Branch');
