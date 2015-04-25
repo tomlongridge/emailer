@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class GenericDAO<E, K extends Serializable> {
 
 	@Autowired

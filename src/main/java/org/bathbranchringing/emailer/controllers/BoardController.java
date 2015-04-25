@@ -5,11 +5,15 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.bathbranchringing.emailer.core.domain.Board;
+import org.bathbranchringing.emailer.core.domain.Group;
 import org.bathbranchringing.emailer.core.domain.Notice;
 import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping({"/towers/{boardId}", "/groups/{boardId}"})
+@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class BoardController {
     
     @Autowired
@@ -151,6 +156,28 @@ public class BoardController {
         model.addAttribute("notice", notice);
         
         return "/pages/editNotice";
+    }
+    
+    @RequestMapping("/information")
+    public String infoPage(@PathVariable final String boardId,
+                           final ModelMap model) {
+        
+        final Board board = boardDAO.find(boardId);
+        if (board == null) {
+            return "redirect:/home";
+        }
+        
+        Hibernate.initialize(board.getAffiliatedTo());
+        
+        model.addAttribute("board", board);
+        
+        if (board.isGroup()) {
+            Hibernate.initialize(((Group) board).getAffiliates());
+            return "/pages/groupInformation";
+        } else {
+            return "/pages/towerInformation";
+        }
+        
     }
 	
 }

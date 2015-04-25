@@ -41,7 +41,7 @@ public class User implements UserDetails {
 	@Column
 	private boolean enabled;
 	
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user")
 	private List<UserRole> roles;
 	
 	public long getId() {

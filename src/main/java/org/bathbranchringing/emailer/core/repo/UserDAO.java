@@ -1,6 +1,7 @@
 package org.bathbranchringing.emailer.core.repo;
 
 import org.bathbranchringing.emailer.core.domain.User;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +23,7 @@ public class UserDAO extends GenericDAO<User, Long> implements UserDetailsServic
             throw new UsernameNotFoundException(
                     String.format("A user with email address \"%s\" not found.", username));
         } else {
+            Hibernate.initialize(user.getAuthorities());
             return user;
         }
     }

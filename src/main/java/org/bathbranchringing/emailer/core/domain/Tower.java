@@ -81,17 +81,23 @@ public class Tower extends Board {
 	    return false;
 	}
 
+    public String getLocation() {
+        StringBuilder name = new StringBuilder();
+        if (area != null) {
+            name.append(area);
+            name.append(", "); 
+        }
+        name.append(town);
+        return name.toString();
+    }
+
     public String getDisplayName() {
         StringBuilder name = new StringBuilder();
         if (dedication != null) {
             name.append(dedication);
             name.append(", "); 
         }
-        if (area != null) {
-            name.append(area);
-            name.append(", "); 
-        }
-        name.append(town);
+        name.append(getLocation());
         return name.toString();
     }
 

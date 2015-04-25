@@ -14,6 +14,8 @@ import org.bathbranchringing.emailer.core.repo.EventDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping({"/towers/{boardId}/diary", "/groups/{boardId}/diary"})
+@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class DiaryController {
     
     @Value("${diary.numMonths}")
