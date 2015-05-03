@@ -105,7 +105,21 @@ public class Board {
     public boolean isMember(final User user) {
         
         for (Membership m : members) {
-            if ((m.getJoined() != null) && (m.getUser().getId() == user.getId())) {
+            if ((m.getJoined() != null)
+                    && (m.getUser().getId() == user.getId())) {
+                return true;
+            }
+        }
+        return false;
+        
+    }
+    
+    public boolean isAdmin(final User user) {
+        
+        for (Membership m : members) {
+            if ((m.getJoined() != null)
+                    && (m.getUser().getId() == user.getId())
+                    && (m.getRole() != null)) {
                 return true;
             }
         }

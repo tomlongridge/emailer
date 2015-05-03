@@ -23,7 +23,7 @@
                 th:href="@{/{boardType}/{boardId}/members(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}"
                 th:classappend="${(#httpServletRequest.requestURL.toString().contains('/members')) ? 'active' : ''}">Members</a>
         </div>
-        <div class="btn-group" role="group" aria-label="...">
+        <div class="btn-group" role="group" aria-label="..." th:if="${#httpServletRequest.userPrincipal}">
             <form th:action="@{/{boardType}/{boardId}/members(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}" method="post">
                 <button type="submit" class="btn btn-default" name="action" value="subscribe"
                         th:unless="${board.isSubscribed(#httpServletRequest.userPrincipal.principal)} or

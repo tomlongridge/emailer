@@ -24,7 +24,7 @@
                             <input type="text" class="form-control" id="searchBox" name="search"
                                 placeholder="Town, County, Dedication" />
                         </div>
-                        <button type="submit" class="btn btn-default">Search</button>
+                        <button type="submit" id="searchBtn" class="btn btn-default">Search</button>
                     </form>
     
                 </div>
@@ -33,7 +33,9 @@
     
                     <div class="col-sm-9 col-lg-9 col-md-9">
     
-                        <table class="table table-striped">
+                        <div class="alert alert-danger" th:if="${towers ne null and #lists.isEmpty(towers)}">No towers found.</div>
+    
+                        <table class="table table-striped" th:unless="${#lists.isEmpty(towers)}">
     
                             <thead>
                                 <tr>
