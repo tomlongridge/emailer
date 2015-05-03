@@ -31,7 +31,7 @@ public class Emailer {
     @Value("${notifications.senderAddress}")
     private String senderAddress;
     
-    @Scheduled(fixedDelay = 10000000)
+//    @Scheduled(fixedDelay = 10000000)
     public void sendNotifications() {
         
         // Session configuration
