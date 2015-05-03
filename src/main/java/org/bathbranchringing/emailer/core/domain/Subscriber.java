@@ -1,5 +1,7 @@
 package org.bathbranchringing.emailer.core.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,15 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.security.core.GrantedAuthority;
-
 @Entity
 @Table
-public class CommitteeMember implements GrantedAuthority {
+public class Subscriber {
 
-    private static final long serialVersionUID = -5296383611739147502L;
-
-    @Column(name = "committeeMemberId")
+    @Column(name = "subscriptionId")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -29,9 +27,9 @@ public class CommitteeMember implements GrantedAuthority {
     @ManyToOne
     @JoinColumn(name = "boardId")
     private Board board;
-	
-	@Column(nullable = false, length = 50)
-	private String role;
+    
+    @Column
+    private Date subscribed;
 
     public long getId() {
         return id;
@@ -41,17 +39,28 @@ public class CommitteeMember implements GrantedAuthority {
         return user;
     }
     
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public Board getBoard() {
         return board;
     }
 
-    public String getRole() {
-        return role;
+    public Date getSubscribed() {
+        return subscribed;
     }
 
-    @Override
-    public String getAuthority() {
-        return role;
+    public void setSubscribed(Date subscribed) {
+        this.subscribed = subscribed;
     }
-	
+    
 }

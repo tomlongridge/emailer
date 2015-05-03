@@ -2,9 +2,9 @@ package org.bathbranchringing.emailer.core.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -35,9 +36,13 @@ public class Board {
 	           inverseJoinColumns = @JoinColumn(name = "towerGroup"))
 	private List<Group> affiliatedTo;
     
-    @OneToMany(mappedBy = "board")
-    private List<CommitteeMember> committee;
-	
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("role ASC")
+    private List<Membership> members;
+    
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscriber> subscribers;
+    
     public Long getId() {
 		return id;
 	}
@@ -50,10 +55,6 @@ public class Board {
         return affiliatedTo;
     }
     
-    public List<CommitteeMember> getCommittee() {
-        return committee;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -66,16 +67,50 @@ public class Board {
         this.affiliatedTo = affiliatedTo;
     }
     
-    public void setCommittee(List<CommitteeMember> committee) {
-        this.committee = committee;
-    }
-    
     public boolean isGroup() {
         return false;
     }
     
     public String getDisplayName() {
         return identifier;
+    }
+    
+    public List<Membership> getMembers() {
+        return members;
+    }
+    
+    public void setMembers(List<Membership> members) {
+        this.members = members;
+    }
+
+    public List<Subscriber> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<Subscriber> subscribers) {
+        this.subscribers = subscribers;
+    }
+    
+    public boolean isSubscribed(final User user) {
+        
+        for (Subscriber s : subscribers) {
+            if (s.getUser().getId() == user.getId()) {
+                return true;
+            }
+        }
+        return false;
+        
+    }
+    
+    public boolean isMember(final User user) {
+        
+        for (Membership m : members) {
+            if ((m.getJoined() != null) && (m.getUser().getId() == user.getId())) {
+                return true;
+            }
+        }
+        return false;
+        
     }
 
 }

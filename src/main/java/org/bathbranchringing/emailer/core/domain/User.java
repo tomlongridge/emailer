@@ -3,9 +3,9 @@ package org.bathbranchringing.emailer.core.domain;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,10 +44,21 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<UserRole> roles;
     
-    @OneToMany(mappedBy = "user")
-    private List<CommitteeMember> committees;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Membership> membership;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscriber> subscriptions;
 	
-	public long getId() {
+	public List<Subscriber> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscriber> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public long getId() {
 		return id;
 	}
 
@@ -63,7 +74,43 @@ public class User implements UserDetails {
 		return emailAddress;
 	}
 	
-	public String getPassword() {
+	public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setMembership(List<Membership> committee) {
+        this.membership = committee;
+    }
+
+    public String getPassword() {
         return password;
     }
 
@@ -75,8 +122,8 @@ public class User implements UserDetails {
 		return String.format("%s %s", firstName, surname);
 	}
     
-    public List<CommitteeMember> getCommittees() {
-        return committees;
+    public List<Membership> getMembership() {
+        return membership;
     }
 
     @Override

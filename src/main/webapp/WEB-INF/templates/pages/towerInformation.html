@@ -48,33 +48,6 @@
                         <li><a th:href="@{/groups/{boardId}/information(boardId=${affiliate.identifier})}" th:text="${affiliate.displayName}"></a></li>
                     </ul>
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Committee</label>
-                    <p th:if="${#lists.isEmpty(board.committee)}" class="form-control-static">None</p>
-                    <table th:unless="${#lists.isEmpty(board.committee)}" class="table table-striped">
-    
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                            </tr>
-                        </thead>
-    
-                        <tbody>
-    
-                            <tr th:each="member : ${board.committee}">
-                                <td>
-                                    <span th:text="${member.user.displayName}"></span>
-                                </td>
-                                <td>
-                                    <span th:text="${member.role}"></span>
-                                </td>
-                            </tr>
-    
-                        </tbody>
-                        
-                    </table>
-                </div>
             </div>
 
         </div>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="/fragments/header :: head(title=${board.displayName + ': Members'})"></head>
+
+<body>
+
+    <nav th:replace="/fragments/header :: navigation"></nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <div th:replace="/fragments/boardNavigation :: navigation"></div>
+
+            <div class="col-md-9">
+            
+                <h4>Committee</h4>
+                <p th:if="${#lists.isEmpty(board.members.?[role ne null])}" class="form-control-static">None</p>
+                <table th:unless="${#lists.isEmpty(board.members.?[role ne null])}" class="table table-striped">
+    
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+    
+                        <tr th:each="member : ${board.members.?[role ne null]}">
+                            <td>
+                                <span th:text="${member.user.displayName}"></span>
+                            </td>
+                            <td>
+                                <span th:text="${member.role}"></span>
+                            </td>
+                        </tr>
+    
+                    </tbody>
+                    
+                </table>
+            
+                <h4>Members</h4>
+                <p th:if="${#lists.isEmpty(board.members.?[role eq null and joined ne null])}" class="form-control-static">None</p>
+                <table th:unless="${#lists.isEmpty(board.members.?[role eq null and joined ne null])}" class="table table-striped">
+    
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+    
+                        <tr th:each="member : ${board.members.?[role eq null and joined ne null]}">
+                            <td>
+                                <span th:text="${member.user.displayName}"></span>
+                            </td>
+                        </tr>
+    
+                    </tbody>
+                    
+                </table>
+            
+                <h4>Members Pending Approval</h4>
+                <p th:if="${#lists.isEmpty(board.members.?[joined eq null])}" class="form-control-static">None</p>
+                <table th:unless="${#lists.isEmpty(board.members.?[joined eq null])}" class="table table-striped">
+    
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+    
+                        <tr th:each="member : ${board.members.?[joined eq null]}">
+                            <td>
+                                <span th:text="${member.user.displayName}"></span>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary pull-right"
+                                           th:href="@{members/{userId}?approve=true(userId=${member.user.id})}">Approve</a>
+                                <a class="btn btn-default pull-right"
+                                           th:href="@{members/{userId}?approve=false(userId=${member.user.id})}">Decline</a>
+                            </td>
+                        </tr>
+    
+                    </tbody>
+                    
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <div th:include="/fragments/footer"></div>
+
+</body>
+
+</html>

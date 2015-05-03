@@ -5,6 +5,9 @@ SET @userId = LAST_INSERT_ID();
 
 INSERT INTO UserRole (userId, role) VALUE (@userId, 'USER');
 
+INSERT INTO User (firstName, surname, emailAddress, password, enabled) VALUE ('Another', 'User', 'email@gmail.com', 'tom', true);
+SET @userId2 = LAST_INSERT_ID();
+
 INSERT INTO Country (name) VALUE ('England');
 SET @countryId = LAST_INSERT_ID();
 
@@ -16,7 +19,8 @@ SET @towerId = LAST_INSERT_ID();
 
 INSERT INTO Tower (boardId, dedication, area, town, county, numBells, tenorWeightCwt, tenorWeightQtrs, tenorWeightLbs) VALUE (@towerId, 'St Mary the Virgin', 'Bathwick', 'Bath', @countyId, 10, 18, 3, 20);
 
-INSERT INTO CommitteeMember (role, boardId, userId) VALUE ('Tower Master', @towerId, @userId);
+INSERT INTO Membership (boardId, userId, role, joined, approvedBy) VALUE (@towerId, @userId, 'Tower Master', current_timestamp(), @userId);
+INSERT INTO Membership (boardId, userId, role, joined, approvedBy) VALUE (@towerId, @userId2, NULL, current_timestamp(), @userId);
 
 INSERT INTO Board (identifier) VALUE ('BathBranch');
 SET @groupId = LAST_INSERT_ID();

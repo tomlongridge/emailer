@@ -38,6 +38,8 @@ public class BoardController {
 		if (board == null) {
 		    return "redirect:/home";
 		}
+        Hibernate.initialize(board.getSubscribers());
+        Hibernate.initialize(board.getMembers());
 		model.addAttribute("board", board);
 		
 		final List<Notice> notices = noticeDAO.getBoardNotices(board);
@@ -55,6 +57,8 @@ public class BoardController {
         if (board == null) {
             return "redirect:/home";
         }
+        Hibernate.initialize(board.getSubscribers());
+        Hibernate.initialize(board.getMembers());
         model.addAttribute("board", board);
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -77,6 +81,8 @@ public class BoardController {
         if (board == null) {
             return "redirect:/home";
         }
+        Hibernate.initialize(board.getSubscribers());
+        Hibernate.initialize(board.getMembers());
         model.addAttribute("board", board);
 
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -100,6 +106,8 @@ public class BoardController {
         if (board == null) {
             return "redirect:/home";
         }
+        Hibernate.initialize(board.getSubscribers());
+        Hibernate.initialize(board.getMembers());
         model.addAttribute("board", board);
 
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -125,6 +133,8 @@ public class BoardController {
         if (board == null) {
             return "redirect:/home";
         }
+        Hibernate.initialize(board.getSubscribers());
+        Hibernate.initialize(board.getMembers());
         model.addAttribute("board", board);
         
 		final Notice notice = noticeDAO.find(noticeId);
@@ -149,6 +159,8 @@ public class BoardController {
         if (board == null) {
             return "redirect:/home";
         }
+        Hibernate.initialize(board.getSubscribers());
+        Hibernate.initialize(board.getMembers());
         model.addAttribute("board", board);
         
         Notice notice = new Notice();
@@ -168,7 +180,8 @@ public class BoardController {
         }
 
         Hibernate.initialize(board.getAffiliatedTo());
-        Hibernate.initialize(board.getCommittee());
+        Hibernate.initialize(board.getSubscribers());
+        Hibernate.initialize(board.getMembers());
         
         model.addAttribute("board", board);
         
@@ -180,5 +193,5 @@ public class BoardController {
         }
         
     }
-	
+    
 }
