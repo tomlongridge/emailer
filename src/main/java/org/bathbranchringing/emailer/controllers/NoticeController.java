@@ -3,8 +3,10 @@ package org.bathbranchringing.emailer.controllers;
 import java.util.Date;
 
 import org.bathbranchringing.emailer.core.domain.Notice;
+import org.bathbranchringing.emailer.core.domain.NotificationType;
 import org.bathbranchringing.emailer.core.domain.User;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
+import org.bathbranchringing.emailer.core.repo.NotificationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,9 +24,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/notices")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class NoticeController {
-	
-	@Autowired
-	private NoticeDAO noticeDAO;
+    
+    @Autowired
+    private NoticeDAO noticeDAO;
+    
+    @Autowired
+    private NotificationDAO notificationDAO;
 	
 	@RequestMapping("/{noticeId}")
 	public String viewNotice(@PathVariable final long noticeId) {
@@ -55,6 +60,8 @@ public class NoticeController {
         notice.setModificationDate(notice.getCreationDate());
         
         final Long id = noticeDAO.add(notice);
+        notificationDAO.add(notice, NotificationType.CREATION);
+        
         return "redirect:/notices/" + id; 
         
     }
@@ -71,7 +78,10 @@ public class NoticeController {
         if (!StringUtils.isEmpty(notice.getLink())) {
             originalNotice.setLink(notice.getLink());
         }
+        
         noticeDAO.update(originalNotice);
+        notificationDAO.add(originalNotice, NotificationType.MODIFICATION);
+        
         return "redirect:/notices/" + noticeId; 
     }
 	

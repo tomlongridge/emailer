@@ -1,6 +1,9 @@
 package org.bathbranchringing.emailer.core.domain;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -89,6 +92,26 @@ public class Board {
 
     public void setSubscribers(List<Subscriber> subscribers) {
         this.subscribers = subscribers;
+    }
+    
+    public Collection<User> getUsers() {
+        
+        final Map<Long, User> users = new HashMap<Long, User>();
+        for (Membership member : this.members) {
+            User user = member.getUser();
+            if (!users.containsKey(user.getId())) {
+                users.put(user.getId(), user);
+            }
+        }
+        for (Subscriber subscriber : this.subscribers) {
+            User user = subscriber.getUser();
+            if (!users.containsKey(user.getId())) {
+                users.put(user.getId(), user);
+            }
+        }
+        
+        return users.values();
+        
     }
     
     public boolean isSubscribed(final User user) {
