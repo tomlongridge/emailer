@@ -55,7 +55,7 @@ public class Emailer {
            message.setSubject(subjectPrefix + subject);
            message.setText(body);
            
-           LOG.info("Sending mail to" + to);
+           LOG.info("Sending mail to " + to);
            
            if (enabled) {
                Transport.send(message);

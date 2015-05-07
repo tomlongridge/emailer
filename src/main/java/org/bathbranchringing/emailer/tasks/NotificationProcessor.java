@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 
 @Configuration
 @EnableScheduling
@@ -32,6 +33,7 @@ public class NotificationProcessor {
     @Autowired
     private Emailer emailer;
     
+    @Transactional(readOnly = false)
     @Scheduled(cron = "${notifications.cron}")
     public void sendNotifications() {
         
@@ -75,8 +77,8 @@ public class NotificationProcessor {
             final Board board = notice.getBoard();
             final Collection<User> users = board.getUsers();
             
-            LOG.info(String.format("Processing notification %d for board %s (%d) to %d user(s)",
-                    board.getDisplayName(), board.getId(), notification.getId(), users.size()));
+            LOG.info(String.format("Processing notification %d for board %s (ID: %d) to %d user(s)",
+                    notification.getId(), board.getDisplayName(), board.getId(), users.size()));
             
             for (User user : users) {
                 emailer.send(user.getEmailAddress(),
