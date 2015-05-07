@@ -3,7 +3,6 @@ package org.bathbranchringing.emailer.core.repo;
 import java.util.List;
 
 import org.bathbranchringing.emailer.core.domain.Tower;
-import org.hibernate.Hibernate;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
