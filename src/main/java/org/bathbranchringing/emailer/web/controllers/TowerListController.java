@@ -1,4 +1,4 @@
-package org.bathbranchringing.emailer.controllers;
+package org.bathbranchringing.emailer.web.controllers;
 
 import org.bathbranchringing.emailer.core.repo.TowerDAO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,12 @@
-package org.bathbranchringing.emailer.controllers;
+package org.bathbranchringing.emailer.web.controllers;
 
 import java.util.Date;
 
-import org.bathbranchringing.emailer.core.domain.Event;
 import org.bathbranchringing.emailer.core.domain.Notice;
+import org.bathbranchringing.emailer.core.domain.NotificationType;
 import org.bathbranchringing.emailer.core.domain.User;
-import org.bathbranchringing.emailer.core.repo.EventDAO;
+import org.bathbranchringing.emailer.core.repo.NoticeDAO;
+import org.bathbranchringing.emailer.core.repo.NotificationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,27 +21,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/events")
+@RequestMapping("/notices")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class EventController {
+public class NoticeController {
     
     @Autowired
-    private EventDAO eventDAO;
+    private NoticeDAO noticeDAO;
+    
+    @Autowired
+    private NotificationDAO notificationDAO;
 	
 	@RequestMapping("/{noticeId}")
 	public String viewNotice(@PathVariable final long noticeId) {
 		
-	    final Event notice = eventDAO.find(noticeId);
-        
-        if (notice != null) {
-            return String.format("redirect:/%1$s/%2$s/diary/%3$tY/%3$tm/%3$td/%4$d",
-                                 notice.getBoard().isGroup() ? "groups" : "towers",
-                                 notice.getBoard().getIdentifier(),
+	    final Notice notice = noticeDAO.find(noticeId);
+	    
+	    if (notice != null) {
+    	    return String.format("redirect:/%1$s/%2$s/notices/%3$tY/%3$tm/%3$td/%4$d",
+    	                         notice.getBoard().isGroup() ? "groups" : "towers",
+    	                         notice.getBoard().getIdentifier(),
                                  notice.getCreationDate(),
                                  noticeId);
-        } else {
-            return "redirect:/home";
-        }
+	    } else {
+	        return "redirect:/home";
+	    }
 	}
     
     @RequestMapping(value = {"", "/"}, method = RequestMethod.POST)
@@ -48,34 +52,37 @@ public class EventController {
                             final BindingResult bindingResult,
                             final ModelMap model) {
         
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
         notice.setCreatedBy(user);
         notice.setCreationDate(new Date());
         notice.setLastModifiedBy(user);
         notice.setModificationDate(notice.getCreationDate());
         
-        final Long id = eventDAO.add((Event) notice);
-        return "redirect:/events/" + id; 
+        final Long id = noticeDAO.add(notice);
+        notificationDAO.add(notice, NotificationType.CREATION);
+        
+        return "redirect:/notices/" + id; 
+        
     }
     
     @RequestMapping(value = "/{noticeId}", method = RequestMethod.POST)
     public String editNotice(@PathVariable final long noticeId,
-                             @ModelAttribute("notice") final Event notice,
+                             @ModelAttribute("notice") final Notice notice,
                              final BindingResult bindingResult,
                              final ModelMap model) {
         
-        final Event originalEvent = eventDAO.find(noticeId);
-        originalEvent.setHeading(notice.getHeading());
-        originalEvent.setContent(notice.getContent());
+        final Notice originalNotice = noticeDAO.find(noticeId);
+        originalNotice.setHeading(notice.getHeading());
+        originalNotice.setContent(notice.getContent());
         if (!StringUtils.isEmpty(notice.getLink())) {
-            originalEvent.setLink(notice.getLink());
+            originalNotice.setLink(notice.getLink());
         }
-        originalEvent.setStartDate(notice.getStartDate());
-        originalEvent.setEndDate(notice.getEndDate());
         
-        eventDAO.update(originalEvent);
-        return "redirect:/events/" + noticeId; 
+        noticeDAO.update(originalNotice);
+        notificationDAO.add(originalNotice, NotificationType.MODIFICATION);
+        
+        return "redirect:/notices/" + noticeId; 
     }
-    
+	
 }

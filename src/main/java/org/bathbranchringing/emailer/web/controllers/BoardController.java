@@ -1,4 +1,4 @@
-package org.bathbranchringing.emailer.controllers;
+package org.bathbranchringing.emailer.web.controllers;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -7,7 +7,10 @@ import java.util.List;
 import org.bathbranchringing.emailer.core.domain.Board;
 import org.bathbranchringing.emailer.core.domain.Group;
 import org.bathbranchringing.emailer.core.domain.Notice;
+import org.bathbranchringing.emailer.core.domain.Tower;
 import org.bathbranchringing.emailer.core.repo.BoardDAO;
+import org.bathbranchringing.emailer.core.repo.CountryDAO;
+import org.bathbranchringing.emailer.core.repo.CountyDAO;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -29,8 +35,14 @@ public class BoardController {
     
 	@Autowired
 	private NoticeDAO noticeDAO;
+    
+    @Autowired
+    private CountyDAO countyDAO;
+    
+    @Autowired
+    private CountryDAO countryDAO;
 	
-	@RequestMapping({"", "/", "/notices"})
+	@RequestMapping(value = {"", "/", "/notices"}, method = RequestMethod.GET)
 	public String noticesPage(@PathVariable final String boardId,
                               final ModelMap model) {
 		
@@ -172,6 +184,7 @@ public class BoardController {
     
     @RequestMapping("/information")
     public String infoPage(@PathVariable final String boardId,
+                           @RequestParam(required = false, defaultValue = "false") final boolean edit,
                            final ModelMap model) {
         
         final Board board = boardDAO.find(boardId);
@@ -189,9 +202,38 @@ public class BoardController {
             Hibernate.initialize(((Group) board).getAffiliates());
             return "/pages/groupInformation";
         } else {
-            return "/pages/towerInformation";
+            if (edit) {
+                model.addAttribute("countries", countryDAO.list());
+                model.addAttribute("counties", countyDAO.list());
+                return "/pages/editTower";
+            } else {
+                return "/pages/towerInformation";                
+            }
         }
         
     }
+    
+    @RequestMapping(value = "/information", method = RequestMethod.POST)
+    public String newTower(@PathVariable final String boardId,
+                           @ModelAttribute("board") final Tower tower,
+                           final BindingResult bindingResult) {
+        
+        Board originalBoard = boardDAO.find(boardId);
+        if (!originalBoard.isGroup()) {
+            Tower originalTower = (Tower) originalBoard;
+            originalTower.setIdentifier(tower.getIdentifier());
+            originalTower.setDedication(tower.getDedication());
+            originalTower.setArea(tower.getArea());
+            originalTower.setTown(tower.getTown());
+            originalTower.setCounty(tower.getCounty());
+            originalTower.setNumBells(tower.getNumBells());
+            originalTower.setTenorWeightCwt(tower.getTenorWeightCwt());
+            originalTower.setTenorWeightQtrs(tower.getTenorWeightQtrs());
+            originalTower.setTenorWeightLbs(tower.getTenorWeightLbs());
+            boardDAO.update(originalTower);
+        }
+        return "redirect:information"; 
+    }
+    
     
 }

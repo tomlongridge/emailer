@@ -48,6 +48,9 @@
                         <li><a th:href="@{/groups/{boardId}/information(boardId=${affiliate.identifier})}" th:text="${affiliate.displayName}"></a></li>
                     </ul>
                 </div>
+                
+                <a href="?edit=1" class="btn btn-default"
+                   th:if="${board.isAdmin(#httpServletRequest.userPrincipal)}">Edit</a>
             </div>
 
         </div>

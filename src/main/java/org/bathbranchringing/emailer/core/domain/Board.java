@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.springframework.security.core.Authentication;
+
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -114,36 +116,45 @@ public class Board {
         
     }
     
-    public boolean isSubscribed(final User user) {
+    public boolean isSubscribed(final Authentication principal) {
         
-        for (Subscriber s : subscribers) {
-            if (s.getUser().getId() == user.getId()) {
-                return true;
+        if ((principal != null) && (principal.getPrincipal() instanceof User)) {
+            final User user = (User) principal.getPrincipal();
+            for (Subscriber s : subscribers) {
+                if (s.getUser().getId() == user.getId()) {
+                    return true;
+                }
             }
         }
         return false;
         
     }
     
-    public boolean isMember(final User user) {
-        
-        for (Membership m : members) {
-            if ((m.getJoined() != null)
-                    && (m.getUser().getId() == user.getId())) {
-                return true;
+    public boolean isMember(final Authentication principal) {
+
+        if ((principal != null) && (principal.getPrincipal() instanceof User)) {
+            final User user = (User) principal.getPrincipal();
+            for (Membership m : members) {
+                if ((m.getJoined() != null)
+                        && (m.getUser().getId() == user.getId())) {
+                    return true;
+                }
             }
         }
         return false;
         
     }
     
-    public boolean isAdmin(final User user) {
-        
-        for (Membership m : members) {
-            if ((m.getJoined() != null)
-                    && (m.getUser().getId() == user.getId())
-                    && (m.getRole() != null)) {
-                return true;
+    public boolean isAdmin(final Authentication principal) {
+
+        if ((principal != null) && (principal.getPrincipal() instanceof User)) {
+            final User user = (User) principal.getPrincipal();
+            for (Membership m : members) {
+                if ((m.getJoined() != null)
+                        && (m.getUser().getId() == user.getId())
+                        && (m.getRole() != null)) {
+                    return true;
+                }
             }
         }
         return false;

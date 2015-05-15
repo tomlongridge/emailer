@@ -25,7 +25,8 @@
                     <div th:replace="/fragments/viewNoticePanels :: dates"></div>
                 </div>
                 
-                <a href="?edit=1" class="btn btn-default">Edit</a>
+                <a href="?edit=1" class="btn btn-default"
+                   th:if="${board.isAdmin(#httpServletRequest.userPrincipal)}">Edit</a>
 
             </div>
 

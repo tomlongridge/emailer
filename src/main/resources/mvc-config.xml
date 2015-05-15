@@ -38,7 +38,7 @@
   <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
     <property name="formatters">
       <set>
-        <bean class="org.bathbranchringing.emailer.converters.DateFormatter" />
+        <bean class="org.bathbranchringing.emailer.core.converters.DateFormatter" />
       </set>
     </property>
   </bean>

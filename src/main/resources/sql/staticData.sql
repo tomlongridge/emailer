@@ -8,9 +8,17 @@ INSERT INTO UserRole (userId, role) VALUE (@userId, 'USER');
 INSERT INTO User (firstName, surname, emailAddress, password, enabled) VALUE ('Another', 'User', 'email@gmail.com', 'tom', true);
 SET @userId2 = LAST_INSERT_ID();
 
+INSERT INTO Country (name) VALUE ('Scotland');
+
+INSERT INTO Country (name) VALUE ('Wales');
+SET @countryId = LAST_INSERT_ID();
+INSERT INTO County (name, country) VALUE ('Powys', @countryId);
+
 INSERT INTO Country (name) VALUE ('England');
 SET @countryId = LAST_INSERT_ID();
 
+INSERT INTO County (name, country) VALUE ('Cornwall', @countryId);
+INSERT INTO County (name, country) VALUE ('Devon', @countryId);
 INSERT INTO County (name, country) VALUE ('Somerset', @countryId);
 SET @countyId = LAST_INSERT_ID();
 

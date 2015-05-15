@@ -12,30 +12,62 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name = "boardId")
 public class Tower extends Board {
 
-	@Column(length = 100)
-	private String dedication;
+    @Column(length = 100)
+    private String dedication;
 
-	@Column(length = 100)
-	private String area;
+    @Column(length = 100)
+    private String area;
 
-	@Column(nullable = false, length = 100)
-	private String town;
-	
-	@ManyToOne
-	@JoinColumn(name = "county")
-	private County county;
-	
-	@Column(nullable = false)
-	private short numBells;
-	
-	@Column(nullable = false)
-	private short tenorWeightCwt;
-	
-	@Column(nullable = false)
-	private short tenorWeightQtrs;
-	
-	@Column(nullable = false)
-	private short tenorWeightLbs;
+    @Column(nullable = false, length = 100)
+    private String town;
+    
+    @ManyToOne
+    @JoinColumn(name = "county")
+    private County county;
+    
+    @Column(nullable = false)
+    private short numBells;
+    
+    @Column(nullable = false)
+    private short tenorWeightCwt;
+    
+    @Column(nullable = false)
+    private short tenorWeightQtrs;
+    
+    @Column(nullable = false)
+    private short tenorWeightLbs;
+
+	public void setDedication(String dedication) {
+        this.dedication = dedication;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public void setCounty(County county) {
+        this.county = county;
+    }
+
+    public void setNumBells(short numBells) {
+        this.numBells = numBells;
+    }
+
+    public void setTenorWeightCwt(short tenorWeightCwt) {
+        this.tenorWeightCwt = tenorWeightCwt;
+    }
+
+    public void setTenorWeightQtrs(short tenorWeightQtrs) {
+        this.tenorWeightQtrs = tenorWeightQtrs;
+    }
+
+    public void setTenorWeightLbs(short tenorWeightLbs) {
+        this.tenorWeightLbs = tenorWeightLbs;
+    }
 
 	public String getDedication() {
 		return dedication;

@@ -1,4 +1,4 @@
-package org.bathbranchringing.emailer.controllers;
+package org.bathbranchringing.emailer.web.controllers;
 
 import java.util.ArrayList;
 import java.util.Calendar;

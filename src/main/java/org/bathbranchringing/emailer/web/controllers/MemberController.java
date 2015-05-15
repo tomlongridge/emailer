@@ -1,4 +1,4 @@
-package org.bathbranchringing.emailer.controllers;
+package org.bathbranchringing.emailer.web.controllers;
 
 import java.util.Date;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.UserDAO;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
@@ -90,7 +91,7 @@ public class MemberController {
 
             Membership member = null;
             for (Membership m : membership) {
-                if (m.getUser().getId() == user.getId()) {
+                if (m.getBoard().getId() == board.getId()) {
                     member = m;
                     break;
                 }
@@ -136,10 +137,10 @@ public class MemberController {
         }
         
         if (membership != null) {
-            final User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (board.isMember(loggedInUser)) {
+            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if ((authentication != null) && (authentication instanceof User) && board.isMember(authentication)) {
                 if (approve) {
-                    member.setApprovedBy(loggedInUser);
+                    member.setApprovedBy((User) authentication.getPrincipal());
                     member.setJoined(new Date());
                 } else {
                     membership.remove(member);

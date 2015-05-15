@@ -17,7 +17,7 @@
  * 
  * =============================================================================
  */
-package org.bathbranchringing.emailer.converters;
+package org.bathbranchringing.emailer.core.converters;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

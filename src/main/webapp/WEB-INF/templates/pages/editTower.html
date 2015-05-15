@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="/fragments/header :: head(title=${board.displayName} ?: 'New Tower')"></head>
+
+<body>
+
+    <nav th:replace="/fragments/header :: navigation"></nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <div th:replace="/fragments/boardNavigation :: navigation"></div>
+
+            <div class="col-md-9">
+
+                <form action="#" th:action="@{information}" th:object="${board}" method="post">
+                
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="form-group">
+                        <label for="content">Dove ID</label>
+                        <input type="text" class="form-control" th:field="*{identifier}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="heading">Dedication</label>
+                        <input type="text" class="form-control" th:field="*{dedication}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Area</label>
+                        <input type="text" class="form-control" th:field="*{area}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Town</label>
+                        <input type="text" class="form-control" th:field="*{town}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Country</label>
+                        <select class="form-control" th:field="*{county.country.id}">
+                            <option value="0">-- Select Country --</option>
+                            <option th:each="country : ${countries}"
+                                    th:value="${country.id}"
+                                    th:text="${country.name}" />
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">County</label>
+                        <select class="form-control" th:field="*{county.id}">
+                            <option value="0">-- Select County --</option>
+                            <option th:each="county : ${counties}"
+                                    th:value="${county.id}"
+                                    th:text="${county.name}" />
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Bells</label>
+                        <input type="number" class="form-control" th:field="*{numBells}" />
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label for="content">Tenor</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <input type="number" class="form-control" th:field="*{tenorWeightCwt}" placeholder="cwt" />
+                            </div>
+                            <div class="col-lg-2">
+                                <input type="number" class="form-control" th:field="*{tenorWeightQtrs}" placeholder="qtrs" min="0" max="3" />
+                            </div>
+                            <div class="col-lg-2">
+                                <input type="number" class="form-control" th:field="*{tenorWeightLbs}" placeholder="lbs" min="0" max="27" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" name="save">Save</button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+    
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    	$(function(){
+			$("select#county\\.country\\.id").change(function(){
+    	    	$.getJSON(/*[[@{/countries}]]*/
+    	    			  + '/' + $("select#county\\.country\\.id").find(":selected").text() + '/counties',
+    	    			  function(counties) {
+                    	      var options = '';
+                    	      for (var i = 0; i < counties.length; i++) {
+                    	        options += '<option value="' + counties[i].id + '">' + counties[i].name + '</option>';
+                    	      }
+                    	      $("select#county\\.id").html(options);
+                          }
+    	    	)
+			})
+		})
+	/*]]>*/
+    </script>
+
+    <div th:include="/fragments/footer"></div>
+
+</body>
+
+</html>

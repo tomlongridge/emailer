@@ -1,14 +1,14 @@
-package org.bathbranchringing.emailer.controllers;
+package org.bathbranchringing.emailer.web.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class LoginController {
+public class HomeController {
 	
-	@RequestMapping("/login")
+	@RequestMapping({"/", "/home"})
 	public String init(final ModelMap model) {
-		return "/pages/login";
+		return "/pages/home";
 	}
 }

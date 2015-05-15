@@ -13,7 +13,9 @@
 	<logger name="org.springframework" level="ERROR" />
 	<logger name="org.hibernate" level="ERROR" />
 	<logger name="ch.qos.logback" level="ERROR" />
+	<logger name="org.apache" level="ERROR" />
 	<logger name="org.jboss" level="ERROR" />
+	<logger name="org.thymeleaf" level="ERROR" />
 
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
