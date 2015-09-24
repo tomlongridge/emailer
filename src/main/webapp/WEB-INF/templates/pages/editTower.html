@@ -16,24 +16,28 @@
 
             <div class="col-md-9">
 
-                <form action="#" th:action="@{information}" th:object="${board}" method="post">
+                <form action="#" th:action="@{information}" th:object="${editableTower}" method="post">
                 
                     <input type="hidden" th:field="*{id}" />
                     <div class="form-group">
                         <label for="content">Dove ID</label>
                         <input type="text" class="form-control" th:field="*{identifier}" />
+                        <div th:if="${#fields.hasErrors('identifier')}" th:errors="*{identifier}" class="alert alert-danger"></div>
                     </div>
                     <div class="form-group">
                         <label for="heading">Dedication</label>
                         <input type="text" class="form-control" th:field="*{dedication}" />
+                        <div th:if="${#fields.hasErrors('dedication')}" th:errors="*{dedication}" class="alert alert-danger"></div>
                     </div>
                     <div class="form-group">
                         <label for="content">Area</label>
                         <input type="text" class="form-control" th:field="*{area}" />
+                        <div th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="alert alert-danger"></div>
                     </div>
                     <div class="form-group">
                         <label for="content">Town</label>
                         <input type="text" class="form-control" th:field="*{town}" />
+                        <div th:if="${#fields.hasErrors('town')}" th:errors="*{town}" class="alert alert-danger"></div>
                     </div>
                     <div class="form-group">
                         <label for="content">Country</label>
@@ -52,10 +56,12 @@
                                     th:value="${county.id}"
                                     th:text="${county.name}" />
                         </select>
+                        <div th:if="${#fields.hasErrors('county')}" th:errors="*{county}" class="alert alert-danger"></div>
                     </div>
                     <div class="form-group">
                         <label for="content">Bells</label>
                         <input type="number" class="form-control" th:field="*{numBells}" />
+                        <div th:if="${#fields.hasErrors('numBells')}" th:errors="*{numBells}" class="alert alert-danger"></div>
                     </div>
                     <div class="form-group">
                         <div class="row">
@@ -63,7 +69,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-2">
-                                <input type="number" class="form-control" th:field="*{tenorWeightCwt}" placeholder="cwt" />
+                                <input type="number" class="form-control" th:field="*{tenorWeightCwt}" placeholder="cwt" min="0" />
                             </div>
                             <div class="col-lg-2">
                                 <input type="number" class="form-control" th:field="*{tenorWeightQtrs}" placeholder="qtrs" min="0" max="3" />
@@ -72,8 +78,13 @@
                                 <input type="number" class="form-control" th:field="*{tenorWeightLbs}" placeholder="lbs" min="0" max="27" />
                             </div>
                         </div>
+                        <div th:if="${#fields.hasErrors('tenorWeightCwt')}" th:errors="*{tenorWeightCwt}" class="alert alert-danger"></div>
+                        <div th:if="${#fields.hasErrors('tenorWeightQtrs')}" th:errors="*{tenorWeightQtrs}" class="alert alert-danger"></div>
+                        <div th:if="${#fields.hasErrors('tenorWeightLbs')}" th:errors="*{tenorWeightLbs}" class="alert alert-danger"></div>
                     </div>
                     
+                    <div th:if="${#fields.hasErrors('global')}" th:errors="*{global}" class="alert alert-danger"></div>
+                        
                     <button type="submit" class="btn btn-primary" name="save">Save</button>
 
                 </form>

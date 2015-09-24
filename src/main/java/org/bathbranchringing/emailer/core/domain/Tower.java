@@ -6,10 +6,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.StringUtils;
+import org.bathbranchringing.emailer.core.domain.validation.ValidateTenorWeight;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table
 @PrimaryKeyJoinColumn(name = "boardId")
+@ValidateTenorWeight
 public class Tower extends Board {
 
     @Column(length = 100)
@@ -19,6 +25,7 @@ public class Tower extends Board {
     private String area;
 
     @Column(nullable = false, length = 100)
+    @Size(min=1, message="A town/location must be specified")
     private String town;
     
     @ManyToOne
@@ -26,27 +33,31 @@ public class Tower extends Board {
     private County county;
     
     @Column(nullable = false)
+    @Range(min=1, max=24, message="The number of bells must be between {min} and {max}")
     private short numBells;
     
     @Column(nullable = false)
+    @Range(min=0, message="The tenor weight must be at least {min} CWT")
     private short tenorWeightCwt;
     
     @Column(nullable = false)
+    @Range(min=0, max=3, message="The number of quarter-weights in the tenor weight must be between {min} and {max}")
     private short tenorWeightQtrs;
     
     @Column(nullable = false)
+    @Range(min=0, max=27, message="The number of pounds in the tenor weight must be between {min} and {max}")
     private short tenorWeightLbs;
 
 	public void setDedication(String dedication) {
-        this.dedication = dedication;
+	    this.dedication = StringUtils.isEmpty(dedication) ? null : dedication;
     }
 
     public void setArea(String area) {
-        this.area = area;
+        this.area = StringUtils.isEmpty(area) ? null : area;
     }
 
     public void setTown(String town) {
-        this.town = town;
+        this.town = StringUtils.isEmpty(town) ? null : town;
     }
 
     public void setCounty(County county) {

@@ -99,16 +99,20 @@ public class Board {
     public Collection<User> getUsers() {
         
         final Map<Long, User> users = new HashMap<Long, User>();
-        for (Membership member : this.members) {
-            User user = member.getUser();
-            if (!users.containsKey(user.getId())) {
-                users.put(user.getId(), user);
+        if (this.members != null) {
+            for (Membership member : this.members) {
+                User user = member.getUser();
+                if (!users.containsKey(user.getId())) {
+                    users.put(user.getId(), user);
+                }
             }
         }
-        for (Subscriber subscriber : this.subscribers) {
-            User user = subscriber.getUser();
-            if (!users.containsKey(user.getId())) {
-                users.put(user.getId(), user);
+        if (this.subscribers != null) {
+            for (Subscriber subscriber : this.subscribers) {
+                User user = subscriber.getUser();
+                if (!users.containsKey(user.getId())) {
+                    users.put(user.getId(), user);
+                }
             }
         }
         
@@ -120,9 +124,11 @@ public class Board {
         
         if ((principal != null) && (principal.getPrincipal() instanceof User)) {
             final User user = (User) principal.getPrincipal();
-            for (Subscriber s : subscribers) {
-                if (s.getUser().getId() == user.getId()) {
-                    return true;
+            if (subscribers != null) {
+                for (Subscriber s : subscribers) {
+                    if (s.getUser().getId() == user.getId()) {
+                        return true;
+                    }
                 }
             }
         }
@@ -134,10 +140,12 @@ public class Board {
 
         if ((principal != null) && (principal.getPrincipal() instanceof User)) {
             final User user = (User) principal.getPrincipal();
-            for (Membership m : members) {
-                if ((m.getJoined() != null)
-                        && (m.getUser().getId() == user.getId())) {
-                    return true;
+            if (members != null) {
+                for (Membership m : members) {
+                    if ((m.getJoined() != null)
+                            && (m.getUser().getId() == user.getId())) {
+                        return true;
+                    }
                 }
             }
         }

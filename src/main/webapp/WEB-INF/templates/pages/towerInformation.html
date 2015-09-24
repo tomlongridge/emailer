@@ -15,7 +15,7 @@
             <div th:replace="/fragments/boardNavigation :: navigation"></div>
 
             <div class="col-md-9">
-                <div class="form-group">
+                <div th:if="${board.dedication}" class="form-group">
                     <label class="control-label">Dedication</label>
                     <p class="form-control-static">
                         <span th:text="${board.dedication}"></span>

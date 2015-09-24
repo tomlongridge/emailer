@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.bathbranchringing.emailer.core.domain.Board;
 import org.bathbranchringing.emailer.core.domain.Group;
 import org.bathbranchringing.emailer.core.domain.Notice;
@@ -14,6 +16,7 @@ import org.bathbranchringing.emailer.core.repo.CountyDAO;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -203,6 +206,7 @@ public class BoardController {
             return "/pages/groupInformation";
         } else {
             if (edit) {
+                model.addAttribute("editableTower", board);
                 model.addAttribute("countries", countryDAO.list());
                 model.addAttribute("counties", countyDAO.list());
                 return "/pages/editTower";
@@ -214,25 +218,39 @@ public class BoardController {
     }
     
     @RequestMapping(value = "/information", method = RequestMethod.POST)
-    public String newTower(@PathVariable final String boardId,
-                           @ModelAttribute("board") final Tower tower,
-                           final BindingResult bindingResult) {
-        
+    public String editTower(@PathVariable final String boardId,
+                            @ModelAttribute("editableTower") @Valid final Tower tower,
+                            final BindingResult bindingResult,
+                            final ModelMap model) {
+
         Board originalBoard = boardDAO.find(boardId);
-        if (!originalBoard.isGroup()) {
-            Tower originalTower = (Tower) originalBoard;
-            originalTower.setIdentifier(tower.getIdentifier());
-            originalTower.setDedication(tower.getDedication());
-            originalTower.setArea(tower.getArea());
-            originalTower.setTown(tower.getTown());
-            originalTower.setCounty(tower.getCounty());
-            originalTower.setNumBells(tower.getNumBells());
-            originalTower.setTenorWeightCwt(tower.getTenorWeightCwt());
-            originalTower.setTenorWeightQtrs(tower.getTenorWeightQtrs());
-            originalTower.setTenorWeightLbs(tower.getTenorWeightLbs());
-            boardDAO.update(originalTower);
+        Hibernate.initialize(originalBoard.getAffiliatedTo());
+        Hibernate.initialize(originalBoard.getSubscribers());
+        Hibernate.initialize(originalBoard.getMembers());
+        model.addAttribute("board", originalBoard);
+        if (originalBoard.isAdmin(SecurityContextHolder.getContext().getAuthentication())) {
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("editableTower", tower);
+                model.addAttribute("countries", countryDAO.list());
+                model.addAttribute("counties", countyDAO.list());
+                return "/pages/editTower"; 
+            } else if (!originalBoard.isGroup()) {
+                
+                Tower originalTower = (Tower) originalBoard;
+                originalTower.setIdentifier(tower.getIdentifier());
+                originalTower.setDedication(tower.getDedication());
+                originalTower.setArea(tower.getArea());
+                originalTower.setTown(tower.getTown());
+                originalTower.setCounty(tower.getCounty());
+                originalTower.setNumBells(tower.getNumBells());
+                originalTower.setTenorWeightCwt(tower.getTenorWeightCwt());
+                originalTower.setTenorWeightQtrs(tower.getTenorWeightQtrs());
+                originalTower.setTenorWeightLbs(tower.getTenorWeightLbs());
+                boardDAO.update(originalTower);
+                return "redirect:information"; 
+            }
         }
-        return "redirect:information"; 
+        return "redirect:/home"; 
     }
     
     
