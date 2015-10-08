@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -20,6 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private UserDetailsService userDAO;
+    
+    @Autowired
+    private UpdateSavedRequestFilter savedRequestFilter;
     
     @Autowired
     public void configure(final AuthenticationManagerBuilder builder) throws Exception {
@@ -34,19 +38,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/css/**").permitAll()
             .antMatchers("/js/**").permitAll()
             .antMatchers("/fonts/**").permitAll()
-//        .anyRequest().authenticated()
-            .and()
+        .and()
+            .addFilterAfter(savedRequestFilter, FilterSecurityInterceptor.class)
         .formLogin()
             .loginPage("/login")
             .permitAll()
-            .and()
-        .logout()
-            .deleteCookies("remove")
-            .invalidateHttpSession(true)
-            .logoutUrl("/logout")
-            .logoutSuccessUrl("/login?logout")
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .permitAll();
+        .and()
+            .logout()
+                .deleteCookies("remove")
+                .invalidateHttpSession(true)
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .permitAll();
         
     }
 
