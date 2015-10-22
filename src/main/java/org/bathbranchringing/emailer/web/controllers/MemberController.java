@@ -10,9 +10,9 @@ import org.bathbranchringing.emailer.core.domain.User;
 import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.UserDAO;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping({"/towers/{boardId}", "/groups/{boardId}"})
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class MemberController {
+public class MemberController extends BaseController {
     
+    private static final Logger LOG = LoggerFactory.getLogger(MemberController.class);
+    
+    private static final String PAGE_MEMBER_INFORMATION = "/pages/memberInformation";
+
     @Autowired
     private BoardDAO boardDAO;
     
@@ -37,30 +41,26 @@ public class MemberController {
     public String memberPage(@PathVariable final String boardId,
                              final ModelMap model) {
         
-        final Board board = boardDAO.find(boardId);
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
+        } else {
+            return PAGE_MEMBER_INFORMATION;
         }
-
-        Hibernate.initialize(board.getMembers());
-        Hibernate.initialize(board.getSubscribers());
-        
-        model.addAttribute("board", board);
-        return "/pages/memberInformation";
-        
     }
     
     @RequestMapping(value = "/members", method = RequestMethod.POST)
     public String addMember(@PathVariable final String boardId,
                             @RequestParam(value = "action") final String action,
                             final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
-        if (board == null) {
-            return "redirect:/home";
+
+        final Board board = initialise(model, boardId);
+        final User loggedInUser = getUser();
+
+        if ((board == null) || (loggedInUser == null)) {
+            return REDIRECT_HOME;
         }
         
-        final User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userDAO.find(loggedInUser.getId());
 
         Hibernate.initialize(user.getSubscriptions());
@@ -120,12 +120,11 @@ public class MemberController {
                                 @RequestParam(required = false, defaultValue = "false") final boolean approve,
                                 final ModelMap model) {
 
-        final Board board = boardDAO.find(boardId);
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
-        
-        Hibernate.initialize(board.getMembers());
+
         List<Membership> membership = board.getMembers();
 
         Membership member = null;
@@ -136,11 +135,11 @@ public class MemberController {
             }
         }
         
-        if (membership != null) {
-            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if ((authentication != null) && (authentication instanceof User) && board.isMember(authentication)) {
+        if (member != null) {
+            final User user = getUser();
+            if (board.isMember(user)) {
                 if (approve) {
-                    member.setApprovedBy((User) authentication.getPrincipal());
+                    member.setApprovedBy(user);
                     member.setJoined(new Date());
                 } else {
                     membership.remove(member);

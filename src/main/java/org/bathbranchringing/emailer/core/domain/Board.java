@@ -20,8 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import org.springframework.security.core.Authentication;
-
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -120,10 +118,9 @@ public class Board {
         
     }
     
-    public boolean isSubscribed(final Authentication principal) {
+    public boolean isSubscribed(final User user) {
         
-        if ((principal != null) && (principal.getPrincipal() instanceof User)) {
-            final User user = (User) principal.getPrincipal();
+        if (user != null) {
             if (subscribers != null) {
                 for (Subscriber s : subscribers) {
                     if (s.getUser().getId() == user.getId()) {
@@ -136,10 +133,9 @@ public class Board {
         
     }
     
-    public boolean isMember(final Authentication principal) {
+    public boolean isMember(final User user) {
 
-        if ((principal != null) && (principal.getPrincipal() instanceof User)) {
-            final User user = (User) principal.getPrincipal();
+        if (user != null) {
             if (members != null) {
                 for (Membership m : members) {
                     if ((m.getJoined() != null)
@@ -153,10 +149,9 @@ public class Board {
         
     }
     
-    public boolean isAdmin(final Authentication principal) {
+    public boolean isAdmin(final User user) {
 
-        if ((principal != null) && (principal.getPrincipal() instanceof User)) {
-            final User user = (User) principal.getPrincipal();
+        if ((user != null)) {
             for (Membership m : members) {
                 if ((m.getJoined() != null)
                         && (m.getUser().getId() == user.getId())

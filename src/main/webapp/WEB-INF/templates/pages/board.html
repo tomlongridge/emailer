@@ -38,7 +38,7 @@
 					    </div>
 					</div>
 
-                    <div class="col-sm-4 col-lg-4 col-md-4" th:if="${#httpServletRequest.userPrincipal ne null and board.isAdmin(#httpServletRequest.userPrincipal)}">
+                    <div class="col-sm-4 col-lg-4 col-md-4" th:if="${board.isAdmin(user)}">
                         <a class="btn btn-default" th:href="@{/towers/{boardId}/notices/new(boardId=${board.identifier})}">Create New Notice</a>
                     </div>
 

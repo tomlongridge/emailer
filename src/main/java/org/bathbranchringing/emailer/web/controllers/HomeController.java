@@ -5,7 +5,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HomeController {
+public class HomeController extends BaseController {
 	
 	@RequestMapping({"/", "/home"})
 	public String init(final ModelMap model) {

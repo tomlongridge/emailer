@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/countries")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class CountyController {
+public class CountyController extends BaseController {
     
     @Autowired
     private CountyDAO countyDAO;

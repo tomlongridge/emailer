@@ -12,7 +12,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -26,10 +28,12 @@ public class Notice {
 	private Long id;
 	
 	@Column(nullable = false, length = 512)
+	@Size(min=1, max=512, message = "A heading must be specified")
 	private String heading;
 	
 	@Column(nullable = false)
 	@Type(type="text")
+	@Size(min=1, message = "Some content must be specified")
 	private String content;
     
     @Column(length = 512)
@@ -122,6 +126,6 @@ public class Notice {
     }
 
     public void setLink(String link) {
-        this.link = link;
+        this.link = StringUtils.isEmpty(link) ? null : link;
     }
 }

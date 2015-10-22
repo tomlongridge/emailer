@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDAO;
     
     @Autowired
-    private UpdateSavedRequestFilter savedRequestFilter;
+    private AuthenticationRequestFilter authRequestFilter;
     
     @Autowired
     public void configure(final AuthenticationManagerBuilder builder) throws Exception {
@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/js/**").permitAll()
             .antMatchers("/fonts/**").permitAll()
         .and()
-            .addFilterAfter(savedRequestFilter, FilterSecurityInterceptor.class)
+            .addFilterAfter(authRequestFilter, FilterSecurityInterceptor.class)
         .formLogin()
             .loginPage("/login")
             .permitAll()

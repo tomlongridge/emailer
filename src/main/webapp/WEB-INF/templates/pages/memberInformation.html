@@ -64,7 +64,7 @@
                     
                 </table>
             
-                <div th:if="${board.isAdmin(#httpServletRequest.userPrincipal)}">
+                <div th:if="${board.isAdmin(user)}">
                 
                     <h4>Members Pending Approval</h4>
                     <p th:if="${#lists.isEmpty(board.members.?[joined eq null])}" class="form-control-static">None</p>

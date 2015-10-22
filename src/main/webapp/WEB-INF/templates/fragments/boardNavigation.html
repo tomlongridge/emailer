@@ -26,16 +26,16 @@
         <div class="btn-group" role="group" aria-label="...">
             <form th:action="@{/{boardType}/{boardId}/members(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}" method="post">
                 <button type="submit" class="btn btn-default" name="action" value="subscribe"
-                        th:unless="${board.isSubscribed(#httpServletRequest.userPrincipal)} or
-                                   ${board.isMember(#httpServletRequest.userPrincipal)}">Subscribe</button>
+                        th:unless="${board.isSubscribed(user)} or
+                                   ${board.isMember(user)}">Subscribe</button>
                 <button type="submit" class="btn btn-default" name="action" value="unsubscribe"
-                        th:if="${board.isSubscribed(#httpServletRequest.userPrincipal)} and
-                               not ${board.isMember(#httpServletRequest.userPrincipal)}">Unsubscribe</button>
+                        th:if="${board.isSubscribed(user)} and
+                               not ${board.isMember(user)}">Unsubscribe</button>
                 <button type="submit" class="btn btn-default" name="action" value="join"
-                        th:unless="${board.isMember(#httpServletRequest.userPrincipal)}">Request Membership</button>
+                        th:unless="${board.isMember(user)}">Request Membership</button>
                 <button type="submit" class="btn btn-default" name="action" value="leave"
-                        th:if="${board.isMember(#httpServletRequest.userPrincipal)} and 
-                               not ${board.isAdmin(#httpServletRequest.userPrincipal)}">Leave</button>
+                        th:if="${board.isMember(user)} and 
+                               not ${board.isAdmin(user)}">Leave</button>
             </form>
         </div>
     </div>

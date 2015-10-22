@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping({"/towers/{boardId}/diary", "/groups/{boardId}/diary"})
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class DiaryController {
+public class DiaryController extends BaseController {
     
     @Value("${diary.numMonths}")
     private String numMonthsInDiaryView;
@@ -39,14 +39,11 @@ public class DiaryController {
 	@RequestMapping({"", "/"})
 	public String diaryPage(@PathVariable final String boardId,
                             final ModelMap model) {
-		
-		final Board board = boardDAO.find(boardId);
-		if (board == null) {
-		    return "redirect:/home";
-		}
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-		model.addAttribute("board", board);
+
+        final Board board = initialise(model, boardId);
+        if (board == null) {
+            return REDIRECT_HOME;
+        }
 		
 		final Calendar dateFrom = GregorianCalendar.getInstance();
         dateFrom.set(Calendar.DAY_OF_MONTH, 1);
@@ -82,14 +79,11 @@ public class DiaryController {
     public String eventsPage(@PathVariable final String boardId,
                              @PathVariable final int year,
                              final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
+
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
         dateFrom.set(year, Calendar.JANUARY, 1, 0, 0, 0);
@@ -108,15 +102,12 @@ public class DiaryController {
                              @PathVariable final int year,
                              @PathVariable final int month,
                              final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
-        if (board == null) {
-            return "redirect:/home";
-        }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
 
+        final Board board = initialise(model, boardId);
+        if (board == null) {
+            return REDIRECT_HOME;
+        }
+        
         final Calendar dateFrom = GregorianCalendar.getInstance();
         dateFrom.set(year, month - 1, 1, 0, 0, 0);
         final Calendar dateTo = GregorianCalendar.getInstance();
@@ -135,15 +126,12 @@ public class DiaryController {
                              @PathVariable final int month,
                              @PathVariable final int day,
                              final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
-        if (board == null) {
-            return "redirect:/home";
-        }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
 
+        final Board board = initialise(model, boardId);
+        if (board == null) {
+            return REDIRECT_HOME;
+        }
+        
         final Calendar dateFrom = GregorianCalendar.getInstance();
         dateFrom.set(year, month - 1, day, 0, 0, 0);
         final Calendar dateTo = GregorianCalendar.getInstance();
@@ -164,14 +152,11 @@ public class DiaryController {
                             @PathVariable final long noticeId,
                             @RequestParam(required = false, defaultValue = "false") final boolean edit,
 	                        final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
+
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
         
 		final Event event = eventDAO.find(noticeId);
 		if ((event == null) || (event.getBoard().getId() != board.getId())) {
@@ -190,14 +175,11 @@ public class DiaryController {
     @RequestMapping("/new")
     public String newEvent(@PathVariable final String boardId,
                            final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
+
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
         
         Event event = new Event();
         event.setBoard(board);

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/towers")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class TowerListController {
+public class TowerListController extends BaseController {
 	
 	@Autowired
 	private TowerDAO towerDAO;

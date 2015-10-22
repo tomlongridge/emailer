@@ -19,14 +19,17 @@
 				<div class="thumbnail">
                 
                     <div class="caption-full">
-                        <h3 th:text="${notice.heading}"></h3>
+                        <p th:if="${notice.link}" class="pull-right">
+                            <a th:href="${notice.link}">More information...</a>                        
+                        </p>
+                        <h3 th:text="${notice.heading}" class="notice"></h3>
                         <p th:text="${notice.content}"></p>
                     </div>
                     <div th:replace="/fragments/viewNoticePanels :: dates"></div>
                 </div>
                 
                 <a href="?edit=1" class="btn btn-default"
-                   th:if="${board.isAdmin(#httpServletRequest.userPrincipal)}">Edit</a>
+                   th:if="${board.isAdmin(user)}">Edit</a>
 
             </div>
 

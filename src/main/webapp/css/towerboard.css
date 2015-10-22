@@ -6,3 +6,7 @@ a.list-group-item-selected {
   color: #337ab7;
   font-weight: bold;
 }
+
+h3.notice {
+	margin-top: 0px;
+}

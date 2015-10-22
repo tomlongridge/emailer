@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/groups")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class GroupListController {
+public class GroupListController extends BaseController {
 	
 	@Autowired
 	private GroupDAO groupDAO;
 	
 	@RequestMapping({"/", ""})
-	public String groupssPage(@RequestParam(required = false) final String search,
+	public String groupsPage(@RequestParam(required = false) final String search,
 						      final ModelMap model) {
 	    
 	    if (search != null) {

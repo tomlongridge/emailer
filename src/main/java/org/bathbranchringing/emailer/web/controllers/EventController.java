@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/events")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class EventController {
+public class EventController extends BaseController {
     
     @Autowired
     private EventDAO eventDAO;
@@ -39,7 +39,7 @@ public class EventController {
                                  notice.getCreationDate(),
                                  noticeId);
         } else {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
 	}
     
@@ -48,7 +48,7 @@ public class EventController {
                             final BindingResult bindingResult,
                             final ModelMap model) {
         
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getUser();
         
         notice.setCreatedBy(user);
         notice.setCreationDate(new Date());

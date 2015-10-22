@@ -4,18 +4,22 @@
     <div th:fragment="fields">
 
         <input type="hidden" th:field="*{board.id}" />
+        <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">
             <label for="heading">Heading</label>
             <input type="text" class="form-control" placeholder="Heading" th:field="*{heading}" />
+            <div th:if="${#fields.hasErrors('heading')}" th:errors="*{heading}" class="alert alert-danger"></div>
         </div>
         <div class="form-group">
             <label for="content">Content</label>
             <textarea class="form-control" rows="10" th:field="*{content}"></textarea>
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="alert alert-danger"></div>
         </div>
         <div class="form-group">
             <label for="heading">Link</label>
             <input type="text" class="form-control" placeholder="http://example/url" th:field="*{link}" />
+            <div th:if="${#fields.hasErrors('link')}" th:errors="*{link}" class="alert alert-danger"></div>
         </div>
         
     </div>

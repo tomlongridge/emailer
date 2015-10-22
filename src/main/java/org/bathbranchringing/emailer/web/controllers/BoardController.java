@@ -16,7 +16,6 @@ import org.bathbranchringing.emailer.core.repo.CountyDAO;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping({"/towers/{boardId}", "/groups/{boardId}"})
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-public class BoardController {
+public class BoardController extends BaseController {
     
     @Autowired
     private BoardDAO boardDAO;
@@ -49,17 +48,13 @@ public class BoardController {
 	public String noticesPage(@PathVariable final String boardId,
                               final ModelMap model) {
 		
-		final Board board = boardDAO.find(boardId);
+		final Board board = initialise(model, boardId);
 		if (board == null) {
-		    return "redirect:/home";
+		    return REDIRECT_HOME;
 		}
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-		model.addAttribute("board", board);
 		
 		final List<Notice> notices = noticeDAO.getBoardNotices(board);
 		model.addAttribute("notices", notices);
-		
 		return "/pages/board";
 	}
     
@@ -67,14 +62,11 @@ public class BoardController {
     public String noticesPage(@PathVariable final String boardId,
                               @PathVariable final int year,
                               final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
+
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
         dateFrom.set(year, Calendar.JANUARY, 1, 0, 0, 0);
@@ -91,15 +83,12 @@ public class BoardController {
                               @PathVariable final int year,
                               @PathVariable final int month,
                               final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
-        if (board == null) {
-            return "redirect:/home";
-        }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
 
+        final Board board = initialise(model, boardId);
+        if (board == null) {
+            return REDIRECT_HOME;
+        }
+        
         final Calendar dateFrom = GregorianCalendar.getInstance();
         dateFrom.set(year, month - 1, 1, 0, 0, 0);
         final Calendar dateTo = GregorianCalendar.getInstance();
@@ -116,15 +105,12 @@ public class BoardController {
                               @PathVariable final int month,
                               @PathVariable final int day,
                               final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
-        if (board == null) {
-            return "redirect:/home";
-        }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
 
+        final Board board = initialise(model, boardId);
+        if (board == null) {
+            return REDIRECT_HOME;
+        }
+        
         final Calendar dateFrom = GregorianCalendar.getInstance();
         dateFrom.set(year, month - 1, day, 0, 0, 0);
         final Calendar dateTo = GregorianCalendar.getInstance();
@@ -143,18 +129,15 @@ public class BoardController {
                              @PathVariable final long noticeId,
                              @RequestParam(required = false, defaultValue = "false") final boolean edit,
 	                         final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
+
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
         
 		final Notice notice = noticeDAO.find(noticeId);
 		if ((notice == null) || (notice.getBoard().getId() != board.getId())) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
 		}
 		
 		model.addAttribute("notice", notice);
@@ -169,15 +152,12 @@ public class BoardController {
     @RequestMapping("/notices/new")
     public String newNotice(@PathVariable final String boardId,
                               final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
+
+        final Board board = initialise(model, boardId);
         if (board == null) {
-            return "redirect:/home";
+            return REDIRECT_HOME;
         }
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
-        model.addAttribute("board", board);
-        
+
         Notice notice = new Notice();
         notice.setBoard(board);
         model.addAttribute("notice", notice);
@@ -189,17 +169,13 @@ public class BoardController {
     public String infoPage(@PathVariable final String boardId,
                            @RequestParam(required = false, defaultValue = "false") final boolean edit,
                            final ModelMap model) {
-        
-        final Board board = boardDAO.find(boardId);
-        if (board == null) {
-            return "redirect:/home";
-        }
 
-        Hibernate.initialize(board.getAffiliatedTo());
-        Hibernate.initialize(board.getSubscribers());
-        Hibernate.initialize(board.getMembers());
+        final Board board = initialise(model, boardId);
+        if (board == null) {
+            return REDIRECT_HOME;
+        }
         
-        model.addAttribute("board", board);
+        Hibernate.initialize(board.getAffiliatedTo());
         
         if (board.isGroup()) {
             Hibernate.initialize(((Group) board).getAffiliates());
@@ -223,20 +199,22 @@ public class BoardController {
                             final BindingResult bindingResult,
                             final ModelMap model) {
 
-        Board originalBoard = boardDAO.find(boardId);
-        Hibernate.initialize(originalBoard.getAffiliatedTo());
-        Hibernate.initialize(originalBoard.getSubscribers());
-        Hibernate.initialize(originalBoard.getMembers());
-        model.addAttribute("board", originalBoard);
-        if (originalBoard.isAdmin(SecurityContextHolder.getContext().getAuthentication())) {
+        final Board board = initialise(model, boardId);
+        if (board == null) {
+            return REDIRECT_HOME;
+        }
+        
+        Hibernate.initialize(board.getAffiliatedTo());
+
+        if (board.isAdmin(getUser())) {
             if (bindingResult.hasErrors()) {
                 model.addAttribute("editableTower", tower);
                 model.addAttribute("countries", countryDAO.list());
                 model.addAttribute("counties", countyDAO.list());
                 return "/pages/editTower"; 
-            } else if (!originalBoard.isGroup()) {
+            } else if (!board.isGroup()) {
                 
-                Tower originalTower = (Tower) originalBoard;
+                Tower originalTower = (Tower) board;
                 originalTower.setIdentifier(tower.getIdentifier());
                 originalTower.setDedication(tower.getDedication());
                 originalTower.setArea(tower.getArea());
@@ -250,7 +228,7 @@ public class BoardController {
                 return "redirect:information"; 
             }
         }
-        return "redirect:/home"; 
+        return REDIRECT_HOME; 
     }
     
     

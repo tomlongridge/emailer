@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.MDC;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-public class UpdateSavedRequestFilter extends OncePerRequestFilter {
+public class AuthenticationRequestFilter extends OncePerRequestFilter {
     
     private AuthenticationTrustResolver trustResolver = new AuthenticationTrustResolverImpl();
     private RequestCache requestCache = new HttpSessionRequestCache();
@@ -33,12 +34,26 @@ public class UpdateSavedRequestFilter extends OncePerRequestFilter {
                             new AntPathRequestMatcher("/fonts/**"),
                             new AntPathRequestMatcher("/login/**")));
 
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(final HttpServletRequest request,
+                                    final HttpServletResponse response,
+                                    final FilterChain filterChain)
             throws ServletException, IOException {
+        
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(requestMatcher.matches(request) && trustResolver.isAnonymous(authentication)) {
             requestCache.saveRequest(request, response);
         }
-        filterChain.doFilter(request, response);
+
+        if (authentication != null) {
+            MDC.put("user", authentication.getName());
+        }
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            if (authentication != null) {
+                MDC.remove("user");
+            }
+        }
+            
     }
 }

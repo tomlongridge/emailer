@@ -50,9 +50,7 @@
     
                                 <tr th:each="tower : ${towers}">
                                     <td>
-                                        <strong th:text="${tower.town}"></strong>,
-                                        <span th:text="${tower.dedication}"></span>,
-                                        <span th:text="${tower.area}"></span>
+                                        <strong th:text="${tower.town}"></strong><span th:if="${tower.dedication}" th:text="', ' + ${tower.dedication}"></span><span th:if="${tower.area}" th:text="' ,' + ${tower.area}"></span>
                                     </td>
                                     <td>
                                         <span th:text="${tower.county.name}"></span>,
