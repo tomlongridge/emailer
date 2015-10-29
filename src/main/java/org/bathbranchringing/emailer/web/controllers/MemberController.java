@@ -41,12 +41,16 @@ public class MemberController extends BaseController {
     public String memberPage(@PathVariable final String boardId,
                              final ModelMap model) {
         
+        LOG.debug("-> View Member Information /{}", boardId);
+        
         final Board board = initialise(model, boardId);
         if (board == null) {
+            LOG.error("Unable to find board {}", boardId);
             return REDIRECT_HOME;
-        } else {
-            return PAGE_MEMBER_INFORMATION;
         }
+        
+        LOG.debug("<- View Member Information /{}", boardId);
+        return PAGE_MEMBER_INFORMATION;
     }
     
     @RequestMapping(value = "/members", method = RequestMethod.POST)
@@ -54,15 +58,22 @@ public class MemberController extends BaseController {
                             @RequestParam(value = "action") final String action,
                             final ModelMap model) {
 
+        LOG.debug("-> Add Member /{}/members (action = {})", boardId, action);
+        
         final Board board = initialise(model, boardId);
-        final User loggedInUser = getUser();
-
-        if ((board == null) || (loggedInUser == null)) {
+        if (board == null) {
+            LOG.error("Unable to find board {}", boardId);
             return REDIRECT_HOME;
         }
         
+        final User loggedInUser = getUser();
+        if (loggedInUser == null) {
+            LOG.debug("User not logged in, redirecting to registration page");
+            return REDIRECT_REGISTER;
+        }
+        
+        LOG.debug("Retrieving user {} from database", loggedInUser.getId());
         final User user = userDAO.find(loggedInUser.getId());
-
         Hibernate.initialize(user.getSubscriptions());
         Hibernate.initialize(user.getMembership());
 
@@ -71,45 +82,57 @@ public class MemberController extends BaseController {
 
         if (action.equals("subscribe") || action.equals("unsubscribe")) {
             
+            LOG.debug("Subscription modification requested");
+            
             Subscriber subscriber = null;
             for (Subscriber s : subscribers) {
                 if (s.getUser().getId() == user.getId()) {
+                    LOG.debug("User {} already subscribed to board {}", user.getId(), boardId);
                     subscriber = s;
                     break;
                 }
             }
             if (action.equals("subscribe") && (subscriber == null)) {
+                LOG.debug("Subscribing user {} to board {}", user.getId(), boardId);
                 subscriber = new Subscriber();
                 subscribers.add(subscriber);
                 subscriber.setUser(user);
                 subscriber.setBoard(board);                
             } else if (action.equals("unsubscribe") && (subscriber != null)) {
+                LOG.debug("Unsubscribing user {} from board {}", user.getId(), boardId);
                 subscribers.remove(subscriber);
             }
             
         } else if (action.equals("join") || action.equals("leave")) {
 
+            LOG.debug("Membership modification requested");
+            
             Membership member = null;
             for (Membership m : membership) {
                 if (m.getBoard().getId() == board.getId()) {
+                    LOG.debug("User {} already a member of board {}", user.getId(), boardId);
                     member = m;
                     break;
                 }
             }
             if (action.equals("join") && (member == null)) {
+                LOG.debug("Joining user {} to board {}", user.getId(), boardId);
                 member = new Membership();
                 membership.add(member);
                 member.setUser(user);
                 member.setBoard(board);
                 member.setRole(null);
             } else if (action.equals("leave") && (member != null)) {
+                LOG.debug("Leaving user {} from board {}", user.getId(), boardId);
                 membership.remove(member);
             }
             
         }
         
+        LOG.debug("Persisting user changes");
         userDAO.update(user);
 
+        LOG.debug("<- Add Member /{}/members (action = {})", boardId, action);
         return "redirect:members";
         
     }

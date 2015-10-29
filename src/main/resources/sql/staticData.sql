@@ -1,11 +1,11 @@
 USE emailer;
 
-INSERT INTO User (firstName, surname, emailAddress, password, enabled) VALUE ('Tom', 'Longridge', 'tomlongridge@gmail.com', 'tom', true);
+INSERT INTO User (firstName, surname, emailAddress, password, enabled, creationDate, modificationDate) VALUE ('Tom', 'Longridge', 'tomlongridge@gmail.com', '$2a$10$LDDswWfVbKAODvMIS3HlhuHt87Z79kVN8A7nZ01NkN/UMQh0M1hp.', true, current_timestamp(), current_timestamp());
 SET @userId = LAST_INSERT_ID();
 
 INSERT INTO UserRole (userId, role) VALUE (@userId, 'USER');
 
-INSERT INTO User (firstName, surname, emailAddress, password, enabled) VALUE ('Another', 'User', 'email@gmail.com', 'tom', true);
+INSERT INTO User (firstName, surname, emailAddress, password, enabled, creationDate, modificationDate) VALUE ('Another', 'User', 'email@gmail.com', '$2a$10$LDDswWfVbKAODvMIS3HlhuHt87Z79kVN8A7nZ01NkN/UMQh0M1hp.', true, current_timestamp(), current_timestamp());
 SET @userId2 = LAST_INSERT_ID();
 
 INSERT INTO Country (name) VALUE ('Scotland');

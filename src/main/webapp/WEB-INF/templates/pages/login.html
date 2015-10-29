@@ -13,24 +13,26 @@
         <div class="row">
 
             <div class="col-md-9">
-                <form name="f" th:action="@{/login}" method="post">               
+                <form th:action="@{/login}" method="post">               
                     <fieldset>
-                        <legend>Please Login</legend>
+                        <legend>Login</legend>
                         <div th:if="${param.error}" class="alert alert-danger">    
-                            Invalid username and password.
+                            Invalid email address and password.
                         </div>
                         <div th:if="${param.logout}" class="alert alert-success"> 
                             You have been logged out.
                         </div>
-                        <label for="username">Username</label>
+                        <label for="username">Email Address</label>
                         <input type="text" id="username" name="username"/>        
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password"/>    
-                        <div class="form-actions">
-                            <button type="submit" class="btn">Log in</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary">Go</button>
                     </fieldset>
                 </form>
+                
+                <p>
+                    Not registered? <a th:href="@{/register}">Sign up here</a>.
+                </p>
             </div>
 
         </div>

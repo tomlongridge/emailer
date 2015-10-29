@@ -14,8 +14,9 @@ import org.springframework.ui.ModelMap;
 public class BaseController {
     
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
-    
+
     protected final static String REDIRECT_HOME = "redirect:/home";
+    protected final static String REDIRECT_REGISTER = "redirect:/register";
 
     @Autowired
     private BoardDAO boardDAO;

@@ -1,6 +1,7 @@
 package org.bathbranchringing.emailer.core.domain;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,18 +31,32 @@ public class User implements UserDetails {
 	private long id;
 	
 	@Column(nullable = false, length = 100)
+	@NotBlank(message = "You must provide your first name")
 	private String firstName;
 	
 	@Column(nullable = false, length = 100)
+	@NotBlank(message = "You must provide your surname")
 	private String surname;
 	
 	@Column(nullable = false, length = 150, unique = true)
+	@Email(message = "Invalid email address")
+	@NotBlank(message = "An email address must be provided")
 	private String emailAddress;
 	
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 60)
+    @Length(min = 6, message = "A password of at least {min} characters must be provided")
 	private String password;
 	
-	@Column
+	/* Non-database */
+    private String confirmPassword;
+    
+    @Column(nullable = false)
+    private Date creationDate;
+
+    @Column(nullable = false)
+    private Date modificationDate;
+
+    @Column
 	private boolean enabled;
     
     @OneToMany(mappedBy = "user")
@@ -149,5 +167,29 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return enabled;
+    }
+    
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

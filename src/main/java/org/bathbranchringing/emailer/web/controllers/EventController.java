@@ -7,7 +7,6 @@ import org.bathbranchringing.emailer.core.domain.Notice;
 import org.bathbranchringing.emailer.core.domain.User;
 import org.bathbranchringing.emailer.core.repo.EventDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

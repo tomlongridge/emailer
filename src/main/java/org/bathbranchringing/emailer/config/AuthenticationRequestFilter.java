@@ -32,7 +32,8 @@ public class AuthenticationRequestFilter extends OncePerRequestFilter {
                             new AntPathRequestMatcher("/css/**"),
                             new AntPathRequestMatcher("/js/**"),
                             new AntPathRequestMatcher("/fonts/**"),
-                            new AntPathRequestMatcher("/login/**")));
+                            new AntPathRequestMatcher("/login/**"),
+                            new AntPathRequestMatcher("/register/**")));
 
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
