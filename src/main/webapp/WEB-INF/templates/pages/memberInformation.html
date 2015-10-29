@@ -16,6 +16,19 @@
 
             <div class="col-md-9">
             
+                <div th:if="${param.subscribe}" class="alert alert-success"> 
+                    Subscribed successfully
+                </div>
+                <div th:if="${param.unsubscribe}" class="alert alert-success"> 
+                    Unsubscribed successfully
+                </div>
+                <div th:if="${param.join}" class="alert alert-success"> 
+                    Join request sent to the administrator
+                </div>
+                <div th:if="${param.leave}" class="alert alert-success"> 
+                    Membership removed
+                </div>
+            
                 <h4>Committee</h4>
                 <p th:if="${#lists.isEmpty(board.members.?[role ne null])}" class="form-control-static">None</p>
                 <table th:unless="${#lists.isEmpty(board.members.?[role ne null])}" class="table table-striped">

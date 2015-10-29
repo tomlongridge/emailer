@@ -133,7 +133,7 @@ public class MemberController extends BaseController {
         userDAO.update(user);
 
         LOG.debug("<- Add Member /{}/members (action = {})", boardId, action);
-        return "redirect:members";
+        return "redirect:members?" + action;
         
     }
     

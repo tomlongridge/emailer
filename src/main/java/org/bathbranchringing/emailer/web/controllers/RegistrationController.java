@@ -2,6 +2,7 @@ package org.bathbranchringing.emailer.web.controllers;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.bathbranchringing.emailer.core.domain.User;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +46,8 @@ public class RegistrationController extends BaseController {
     
 	@RequestMapping(value = {"", "/"}, method = RequestMethod.POST)
 	public String newUser(@ModelAttribute("editableUser") @Valid final User user,
-	                      final BindingResult bindingResult) {
+	                      final BindingResult bindingResult,
+	                      final HttpSession session) {
 	    
 	    LOG.debug("-> New User {}", user.getEmailAddress());
 	    
@@ -65,6 +68,7 @@ public class RegistrationController extends BaseController {
 	    user.setPassword(passwordEncoder.encode(user.getPassword()));
         
 	    LOG.debug("Persisting user");
+	    user.setEnabled(true); // TODO: Password confirm?
 	    user.setCreationDate(new Date());
         user.setModificationDate(user.getCreationDate());
 	    userDAO.add(user);
@@ -75,6 +79,11 @@ public class RegistrationController extends BaseController {
         SecurityContextHolder.getContext().setAuthentication(token);
 
         LOG.debug("<- New User");
-        return REDIRECT_HOME;
+        final SavedRequest redirectRequest = (SavedRequest) session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+        if (redirectRequest != null) {
+            return "redirect:" + redirectRequest.getRedirectUrl();
+        } else {
+            return REDIRECT_HOME;
+        }
 	}
 }

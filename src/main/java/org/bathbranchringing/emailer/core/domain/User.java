@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -47,7 +48,7 @@ public class User implements UserDetails {
     @Length(min = 6, message = "A password of at least {min} characters must be provided")
 	private String password;
 	
-	/* Non-database */
+	@Transient
     private String confirmPassword;
     
     @Column(nullable = false)
