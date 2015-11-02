@@ -23,10 +23,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping({"/towers/{boardId}", "/groups/{boardId}"})
+@RequestMapping(
+        {
+            "/" + BoardController.URL_TOWER + "/{boardId}/" + MemberController.URL_MEMBERS,
+            "/" + BoardController.URL_GROUP + "/{boardId}/" + MemberController.URL_MEMBERS
+        }
+)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class MemberController extends BaseController {
     
+    public static final String URL_MEMBERS = "members";
+
     private static final Logger LOG = LoggerFactory.getLogger(MemberController.class);
     
     private static final String PAGE_MEMBER_INFORMATION = "/pages/memberInformation";
@@ -37,7 +44,7 @@ public class MemberController extends BaseController {
     @Autowired
     private UserDAO userDAO;
 	
-    @RequestMapping("/members")
+    @RequestMapping("")
     public String memberPage(@PathVariable final String boardId,
                              final ModelMap model) {
         
@@ -53,12 +60,12 @@ public class MemberController extends BaseController {
         return PAGE_MEMBER_INFORMATION;
     }
     
-    @RequestMapping(value = "/members", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public String addMember(@PathVariable final String boardId,
                             @RequestParam(value = "action") final String action,
                             final ModelMap model) {
 
-        LOG.debug("-> Add Member /{}/members (action = {})", boardId, action);
+        LOG.debug("-> Add Member /{}/{} (action = {})", boardId, URL_MEMBERS, action);
         
         final Board board = initialise(model, boardId);
         if (board == null) {
@@ -132,12 +139,12 @@ public class MemberController extends BaseController {
         LOG.debug("Persisting user changes");
         userDAO.update(user);
 
-        LOG.debug("<- Add Member /{}/members (action = {})", boardId, action);
-        return "redirect:members?" + action;
+        LOG.debug("<- Add Member /{}/{} (action = {})", boardId, URL_MEMBERS, action);
+        return "redirect:" + URL_MEMBERS + "?" + action;
         
     }
     
-    @RequestMapping(value = "/members/{userId}")
+    @RequestMapping(value = "/{userId}")
     public String approveMember(@PathVariable final String boardId,
                                 @PathVariable final long userId,
                                 @RequestParam(required = false, defaultValue = "false") final boolean approve,
@@ -171,7 +178,7 @@ public class MemberController extends BaseController {
             }
         }
         
-        return "redirect:../members";
+        return "redirect:../" + URL_MEMBERS;
     }
     
 }

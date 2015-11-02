@@ -28,9 +28,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping({"/towers/{boardId}", "/groups/{boardId}"})
+@RequestMapping(
+        {
+            "/" + BoardController.URL_TOWER + "/{boardId}",
+            "/" + BoardController.URL_GROUP + "/{boardId}"
+        }
+)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class BoardController extends BaseController {
+
+    public static final String URL_TOWER = "tower";
+    public static final String URL_GROUP = "group";
     
     @Autowired
     private BoardDAO boardDAO;

@@ -22,9 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping({"/towers/{boardId}/diary", "/groups/{boardId}/diary"})
+@RequestMapping(
+        {
+            "/" + BoardController.URL_TOWER + "/{boardId}/" + DiaryController.URL_DIARY,
+            "/" + BoardController.URL_GROUP + "/{boardId}/" + DiaryController.URL_DIARY
+        }
+)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class DiaryController extends BaseController {
+    
+    public static final String URL_DIARY = "diary";
     
     @Value("${diary.numMonths}")
     private String numMonthsInDiaryView;

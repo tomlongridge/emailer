@@ -25,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/notices")
+@RequestMapping("/" + NoticeController.URL_NOTICES)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class NoticeController extends BaseController {
+    
+    private static final String PAGE_EDIT_NOTICE = "/pages/editNotice";
+
+    public static final String URL_NOTICES = "notices";
 
     private static final Logger LOG = LoggerFactory.getLogger(NoticeController.class);
     
@@ -52,8 +56,9 @@ public class NoticeController extends BaseController {
 	    }
 	    
         LOG.debug("<- View Notice: /{}", noticeId);
-	    return String.format("redirect:/%1$s/%2$s/notices/%3$tY/%3$tm/%3$td/%4$d",
-	                         notice.getBoard().isGroup() ? "groups" : "towers",
+	    return String.format("redirect:/%1$s/%2$s/%3$s/%4$tY/%4$tm/%4$td/%5$d",
+	                         notice.getBoard().isGroup() ? BoardController.URL_GROUP : BoardController.URL_TOWER,
+	                         URL_NOTICES,
 	                         notice.getBoard().getIdentifier(),
                              notice.getCreationDate(),
                              noticeId);
@@ -78,7 +83,7 @@ public class NoticeController extends BaseController {
         notificationDAO.add(notice, NotificationType.CREATION);
 
         LOG.debug("<- New Notice: /{}", noticeId);
-        return "redirect:/notices/" + noticeId; 
+        return "redirect:/" + URL_NOTICES + "/" + noticeId; 
         
     }
     
@@ -109,7 +114,7 @@ public class NoticeController extends BaseController {
             notice.setCreationDate(originalNotice.getCreationDate());
             notice.setLastModifiedBy(originalNotice.getLastModifiedBy());
             notice.setModificationDate(originalNotice.getModificationDate());
-            return "/pages/editNotice";
+            return PAGE_EDIT_NOTICE;
         } else {
             LOG.debug("Retrieving edited notice");
 
@@ -123,7 +128,7 @@ public class NoticeController extends BaseController {
             notificationDAO.add(originalNotice, NotificationType.MODIFICATION);
             
             LOG.debug("<- Edit Notice: /{}", noticeId);
-            return "redirect:/notices/" + noticeId; 
+            return "redirect:/" + URL_NOTICES + "/" + noticeId; 
         }
         
     }
