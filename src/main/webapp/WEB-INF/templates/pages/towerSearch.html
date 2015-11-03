@@ -14,14 +14,14 @@
 
             <div th:replace="/fragments/towerListNavigation :: navigation"></div>
             
-            <div class="col-md-9">
+            <div class="col-md-9 mainContent">
 
                 <div class="row">
 
-                    <form class="form-inline" th:action="@{/towers}">
+                    <form class="form-inline" th:action="@{/towers/search}">
                         <div class="form-group">
                             <label class="sr-only" for="searchBox">Search</label>
-                            <input type="text" class="form-control" id="searchBox" name="search"
+                            <input type="text" class="form-control" id="searchBox" name="q"
                                 placeholder="Town, County, Dedication" />
                         </div>
                         <button type="submit" id="searchBtn" class="btn btn-default">Search</button>
@@ -62,7 +62,7 @@
                                     </td>
                                     <td>
                                         <a class="btn btn-primary pull-right"
-                                           th:href="@{/towers/{identifier}/notices(identifier=${tower.identifier})}">View</a>
+                                           th:href="@{/tower/{identifier}/notices(identifier=${tower.identifier})}">View</a>
                                     </td>
                                 </tr>
     

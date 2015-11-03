@@ -14,26 +14,54 @@
 
             <div th:replace="/fragments/towerListNavigation :: navigation"></div>
             
-            <div class="col-md-9">
+            <div class="col-md-9 mainContent">
 
                 <div class="row">
     
                     <div class="col-sm-9 col-lg-9 col-md-9">
-    
-                        <div class="alert alert-danger" th:if="${towers ne null and #lists.isEmpty(towers)}">No towers found.</div>
-    
-                        <ul th:if="${countries ne null and !#lists.isEmpty(countries)}">
-                            <li th:each="country : ${countries}">
-                                <a th:href="@{/towers/{country}(country=${country.name})}" th:text="${country.name}"></a>
-                            </li>
-                        </ul>
+                    
+                    	<div th:if="${countries ne null and !#lists.isEmpty(countries)}">
+	    					<h4>Countries</h4>
+	                        <ul>
+	                            <li th:each="country : ${countries}">
+	                                <a th:if="${selectedCountry ne country.name}"
+	                                   th:href="@{/towers/locations/{country}(country=${country.name})}"
+	                                   th:text="${country.name}"></a>
+	                                <span th:if="${selectedCountry eq country.name}"
+	                                   th:text="${country.name}" style="font-weight:bold"></span>
+	                            </li>
+	                        </ul>
+                        </div>
                         
-                        <ul th:if="${counties ne null and !#lists.isEmpty(counties)}">
-                            <li th:each="county : ${counties}">
-                                <a th:href="@{/towers/{country}/{county}(country=${county.country.name},county=${county.name})}" th:text="${county.name}"></a>
-                            </li>
-                        </ul>
+                        <div th:if="${counties ne null and !#lists.isEmpty(counties)}">
+                        	<h4>Counties</h4>
+	                        <ul>
+	                            <li th:each="county : ${counties}">
+	                                <a th:if="${selectedCounty ne county.name}"
+	                                   th:href="@{/towers/locations/{country}/{county}(country=${county.country.name},county=${county.name})}"
+	                                   th:text="${county.name}"></a>
+                                	<span th:if="${selectedCounty eq county.name}"
+                                   		  th:text="${county.name}" style="font-weight:bold"></span>
+	                            </li>
+	                        </ul>
+                        </div>
                         
+                        <div th:if="${groups ne null and !#lists.isEmpty(groups)}">
+	                        <ul>
+	                            <li th:each="group : ${groups}">
+	                                <a th:if="${selectedGroup ne group.name}"
+	                                   th:href="@{/towers/groups/{name}(name=${group.name})}"
+	                                   th:text="${group.name}"></a>
+                                	<span th:if="${selectedGroup eq group.name}"
+                                   		  th:text="${group.name}" style="font-weight:bold"></span>
+	                            </li>
+	                        </ul>
+                        </div>
+                        
+                        <div class="alert alert-warning" th:if="${towers ne null and #lists.isEmpty(towers)}">
+                        	There are no towers currently registered on TowerBoard for this category.
+                        </div>
+    
                         <table class="table table-striped" th:unless="${#lists.isEmpty(towers)}">
     
                             <thead>

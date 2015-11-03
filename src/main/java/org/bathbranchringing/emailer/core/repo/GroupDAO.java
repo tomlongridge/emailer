@@ -3,9 +3,13 @@ package org.bathbranchringing.emailer.core.repo;
 import java.util.List;
 
 import org.bathbranchringing.emailer.core.domain.Group;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.thymeleaf.util.StringUtils;
 
 @Repository
 public class GroupDAO extends GenericDAO<Group, Long> {
@@ -23,6 +27,7 @@ public class GroupDAO extends GenericDAO<Group, Long> {
         return currentSession()
                 .createCriteria(Group.class)
                 .add(
+                		
                         Restrictions.or(
                                 Restrictions.ilike("name", searchString, MatchMode.ANYWHERE)
                         ))

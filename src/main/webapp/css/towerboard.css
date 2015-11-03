@@ -10,3 +10,7 @@ a.list-group-item-selected {
 h3.notice {
 	margin-top: 0px;
 }
+
+.mainContent {
+	padding-top: 42pt;
+}

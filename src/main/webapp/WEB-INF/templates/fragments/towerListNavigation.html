@@ -4,12 +4,14 @@
         <h3>Towers</h3>
         <div class="list-group">
             <a class="list-group-item"
-                th:href="@{/towers/?search}"
-                th:classappend="${#httpServletRequest.queryString != null and #httpServletRequest.queryString.toString().contains('search') ? 'active' : ''}">Search</a>
+                th:href="@{/towers/search}"
+                th:classappend="${#httpServletRequest.requestURL.toString().contains('/search') ? 'active' : ''}">Search</a>
             <a class="list-group-item"
-                th:href="@{/towers}"
-                th:classappend="${(#httpServletRequest.queryString == null) ? 'active' : ''}">Browse by Location</a>
-            <a class="list-group-item" href="#">Browse by Group</a>
+                th:href="@{/towers/locations}"
+                th:classappend="${#httpServletRequest.requestURL.toString().contains('/locations') ? 'active' : ''}">Browse by Location</a>
+            <a class="list-group-item"
+                th:href="@{/towers/groups}"
+                th:classappend="${#httpServletRequest.requestURL.toString().contains('/groups') ? 'active' : ''}">Browse by Group</a>
         </div>
     </div>
 </body>

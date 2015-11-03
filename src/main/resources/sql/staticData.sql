@@ -32,12 +32,12 @@ INSERT INTO Membership (boardId, userId, role, joined, approvedBy) VALUE (@tower
 
 INSERT INTO Board (identifier) VALUE ('BathBranch');
 SET @groupId = LAST_INSERT_ID();
-INSERT INTO `Group` (boardId, name) VALUE (@groupId, 'Bath Branch');
+INSERT INTO TowerGroup (boardId, name) VALUE (@groupId, 'Bath Branch');
 INSERT INTO Affiliates (affiliate, towerGroup) VALUE (@towerId, @groupId)
 
 INSERT INTO Board (identifier) VALUE ('BathWells');
 SET @groupId2 = LAST_INSERT_ID();
-INSERT INTO `Group` (boardId, name) VALUE (@groupId2, 'Bath and Wells Association');
+INSERT INTO TowerGroup (boardId, name) VALUE (@groupId2, 'Bath and Wells Association');
 INSERT INTO Affiliates (affiliate, towerGroup) VALUE (@groupId, @groupId2)
 
 INSERT INTO Notice (heading, content, board, createdBy, creationDate, lastModifiedBy, modificationDate) VALUE ('Test Notice', 'This is a longer version of the notice text', @towerId, @userId, current_timestamp(), @userId, current_timestamp());
