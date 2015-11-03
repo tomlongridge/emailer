@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="/fragments/header :: head(title='Towers')"></head>
+
+<body>
+
+    <nav th:replace="/fragments/header :: navigation"></nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <div th:replace="/fragments/towerListNavigation :: navigation"></div>
+            
+            <div class="col-md-9 mainContent">
+
+                <div class="row">
+    
+                    <div class="col-sm-9 col-lg-9 col-md-9">
+                    
+                        <div th:if="${towerBrowseByGroupModel.groupLists ne null and !#lists.isEmpty(towerBrowseByGroupModel.groupLists)}">
+                            <div th:each="groupList : ${towerBrowseByGroupModel.groupLists}">
+    	                        <ul>
+    	                            <li th:each="group : ${groupList.groups}">
+    	                                <a th:if="${groupList.selectedGroup ne group.key}"
+    	                                   th:href="@{/towers/groups/{id}(id=${group.key})}"
+    	                                   th:text="${group.value}"></a>
+                                    	<span th:if="${groupList.selectedGroup eq group.key}"
+                                       		  th:text="${group.value}" style="font-weight:bold"></span>
+    	                            </li>
+    	                        </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning" th:if="${towers ne null and #lists.isEmpty(towers)}">
+                        	There are no towers currently registered on TowerBoard for this category.
+                        </div>
+    
+                        <table th:replace="/fragments/towerList :: towerList"></table>
+                            
+                    </div>
+    
+                </div>
+                
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <div th:include="/fragments/footer"></div>
+
+</body>
+
+</html>

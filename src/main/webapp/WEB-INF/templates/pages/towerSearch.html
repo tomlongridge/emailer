@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label class="sr-only" for="searchBox">Search</label>
                             <input type="text" class="form-control" id="searchBox" name="q"
-                                placeholder="Town, County, Dedication" />
+                                placeholder="Town, County, Dedication" th:value="${towerSearchModel.query}" />
                         </div>
                         <button type="submit" id="searchBtn" class="btn btn-default">Search</button>
                     </form>
@@ -35,41 +35,8 @@
     
                         <div class="alert alert-danger" th:if="${towers ne null and #lists.isEmpty(towers)}">No towers found.</div>
     
-                        <table class="table table-striped" th:unless="${#lists.isEmpty(towers)}">
-    
-                            <thead>
-                                <tr>
-                                    <th>Tower</th>
-                                    <th>County</th>
-                                    <th>Bells</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-    
-                            <tbody>
-    
-                                <tr th:each="tower : ${towers}">
-                                    <td>
-                                        <strong th:text="${tower.town}"></strong><span th:if="${tower.dedication}" th:text="', ' + ${tower.dedication}"></span><span th:if="${tower.area}" th:text="', ' + ${tower.area}"></span>
-                                    </td>
-                                    <td>
-                                        <span th:text="${tower.county.name}"></span>,
-                                        <span th:text="${tower.county.country.name}"></span>
-                                    </td>
-                                    <td>
-                                        <strong th:text="${tower.numBells}">10</strong>,
-                                        <span th:text="${tower.tenorWeight}"></span>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-primary pull-right"
-                                           th:href="@{/tower/{identifier}/notices(identifier=${tower.identifier})}">View</a>
-                                    </td>
-                                </tr>
-    
-                            </tbody>
-    
-                        </table>
-    
+                        <table th:replace="/fragments/towerList :: towerList(towers = ${towerSearchModel.towers})"></table>
+                            
                     </div>
     
                 </div>
