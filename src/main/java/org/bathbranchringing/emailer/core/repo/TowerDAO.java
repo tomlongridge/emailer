@@ -2,7 +2,6 @@ package org.bathbranchringing.emailer.core.repo;
 
 import java.util.List;
 
-import org.bathbranchringing.emailer.core.domain.County;
 import org.bathbranchringing.emailer.core.domain.Tower;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
@@ -43,6 +42,11 @@ public class TowerDAO extends GenericDAO<Tower, Long> {
                                 Restrictions.ilike("country.name", searchString, MatchMode.ANYWHERE)
                         ))
                 .list();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<Tower> listAffiliates(final String groupId) {
+    	return currentSession().createQuery("from Tower").list();
     }
 
 }

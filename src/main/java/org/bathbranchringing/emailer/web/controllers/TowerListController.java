@@ -44,7 +44,8 @@ public class TowerListController extends BaseController {
     private TowerBrowseByGroupViewService towerBrowseByGroupViewService;
     
 	@RequestMapping({"/", ""})
-	public String init() {
+	public String init(final ModelMap model) {
+	    model.addAttribute(towerSearchService.populateModel(null));
 	    return PAGE_TOWER_SEARCH;
 	}
 

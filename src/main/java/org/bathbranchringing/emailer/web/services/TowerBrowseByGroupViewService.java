@@ -44,26 +44,30 @@ public class TowerBrowseByGroupViewService {
         LOG.info("Added {} top-level groups", topLevelGroups.getGroups().size());
         model.getGroupLists().add(topLevelGroups);
         
-        LOG.info("Adding sub-groups");
-        TowerBrowseGroupList lastGroupList = topLevelGroups;
-        for (String groupId : groups) {
-            Group group = groupDAO.find(groupId);
-            if (group != null) {
-                LOG.info("Setting {} as a selected group", groupId);
-                lastGroupList.setSelectedGroup(groupId);
-                
-                lastGroupList = new TowerBrowseGroupList();
-                for (Board affiliate : group.getAffiliates()) {
-                    if (affiliate.isGroup()) {
-                        LOG.info("Adding group {}", affiliate.getIdentifier());
-                        lastGroupList.getGroups().put(affiliate.getIdentifier(), affiliate.getDisplayName());
-                    }
-                }
-                LOG.info("Added {} sub-groups", lastGroupList.getGroups().size());
-            } else {
-                LOG.info("Unable to find group {}, ignoring from model", groupId);
-            }
+        if (groups != null) {
+	        LOG.info("Adding sub-groups");
+	        TowerBrowseGroupList lastGroupList = topLevelGroups;
+	        for (String groupId : groups) {
+	            Group group = groupDAO.find(groupId);
+	            if (group != null) {
+	                LOG.info("Setting {} as a selected group", groupId);
+	                lastGroupList.setSelectedGroup(groupId);
+	                
+	                lastGroupList = new TowerBrowseGroupList();
+	                for (Board affiliate : group.getAffiliates()) {
+	                    if (affiliate.isGroup()) {
+	                        LOG.info("Adding group {}", affiliate.getIdentifier());
+	                        lastGroupList.getGroups().put(affiliate.getIdentifier(), affiliate.getDisplayName());
+	                    }
+	                }
+	                LOG.info("Added {} sub-groups", lastGroupList.getGroups().size());
+	            } else {
+	                LOG.info("Unable to find group {}, ignoring from model", groupId);
+	            }
+	        }
+	        towerDAO.listAffiliates(lastGroupList.getSelectedGroup());
         }
+        
         
         LOG.info("<- Populating model");
         return model;

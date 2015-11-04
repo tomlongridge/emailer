@@ -15,7 +15,7 @@ public class TowerSearchViewService {
     public TowerSearchModel populateModel(final String query) {
         TowerSearchModel model = new TowerSearchModel();
         if (!StringUtils.isEmpty(query)) {
-            model.setQuery(query);
+        	model.setQuery(query);
             model.setTowers(towerDAO.search(query));
         }
         return model;
