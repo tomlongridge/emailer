@@ -86,7 +86,7 @@ public class RegistrationController extends BaseController {
         if (redirectRequest != null) {
             return redirect(redirectRequest.getRedirectUrl());
         } else {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
 	}
 }

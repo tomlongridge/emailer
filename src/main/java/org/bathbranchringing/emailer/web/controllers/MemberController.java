@@ -52,7 +52,7 @@ public class MemberController extends BaseController {
         final Board board = initialise(model, boardId);
         if (board == null) {
             LOG.error("Unable to find board {}", boardId);
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         LOG.debug("<- View Member Information /{}", boardId);
@@ -151,7 +151,7 @@ public class MemberController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
 
         List<Membership> membership = board.getMembers();

@@ -39,7 +39,7 @@ public class EventController extends BaseController {
                                  notice.getCreationDate(),
                                  noticeId);
         } else {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
 	}
     

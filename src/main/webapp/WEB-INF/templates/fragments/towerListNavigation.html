@@ -4,8 +4,8 @@
         <h3>Towers</h3>
         <div class="list-group">
             <a class="list-group-item"
-                th:href="@{/towers/search}"
-                th:classappend="${#httpServletRequest.requestURL.toString().contains('/search') ? 'active' : ''}">Search</a>
+                th:href="@{/{towersURL}/{searchURL}(towersURL=${T(org.bathbranchringing.emailer.web.URLConstants).TOWERS},searchURL=${T(org.bathbranchringing.emailer.web.URLConstants).SEARCH_BOARDS})}"
+                th:classappend="${#httpServletRequest.requestURL.toString().contains('/' + T(org.bathbranchringing.emailer.web.URLConstants).SEARCH_BOARDS) ? 'active' : ''}">Search</a>
             <a class="list-group-item"
                 th:href="@{/towers/locations}"
                 th:classappend="${#httpServletRequest.requestURL.toString().contains('/locations') ? 'active' : ''}">Browse by Location</a>

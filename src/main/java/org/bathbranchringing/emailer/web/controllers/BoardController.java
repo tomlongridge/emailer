@@ -63,7 +63,7 @@ public class BoardController extends BaseController {
 		
 		final Board board = initialise(model, boardId);
 		if (board == null) {
-		    return redirect(URLConstants.HOME);
+		    return redirect("/" + URLConstants.HOME);
 		}
 		
 		final List<Notice> notices = noticeDAO.getBoardNotices(board);
@@ -78,7 +78,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -99,7 +99,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -121,7 +121,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -145,12 +145,12 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
 		final Notice notice = noticeDAO.find(noticeId);
 		if ((notice == null) || (notice.getBoard().getId() != board.getId())) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
 		}
 		
 		model.addAttribute("notice", notice);
@@ -168,7 +168,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
 
         Notice notice = new Notice();
@@ -185,7 +185,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         Hibernate.initialize(board.getAffiliatedTo());
@@ -214,7 +214,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         Hibernate.initialize(board.getAffiliatedTo());
@@ -241,7 +241,7 @@ public class BoardController extends BaseController {
                 return redirect(URLConstants.BOARD_INFORMATION); 
             }
         }
-        return redirect(URLConstants.HOME); 
+        return redirect("/" + URLConstants.HOME); 
     }
     
     

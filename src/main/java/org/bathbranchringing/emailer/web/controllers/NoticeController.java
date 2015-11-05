@@ -47,7 +47,7 @@ public class NoticeController extends BaseController {
         LOG.debug("Retrieving notice");
 	    final Notice notice = noticeDAO.find(noticeId);
 	    if (notice == null) {
-	        return redirect(URLConstants.HOME);
+	        return redirect("/" + URLConstants.HOME);
 	    }
 	    
         LOG.debug("<- View Notice: /{}", noticeId);
@@ -93,12 +93,12 @@ public class NoticeController extends BaseController {
         
         final Board board = initialise(model, notice.getBoard().getId());
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         if (!board.isAdmin(getUser())) {
             LOG.warn("Unauthorised edit attempted, user:{}", getUser());
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         final Notice originalNotice = noticeDAO.find(noticeId);

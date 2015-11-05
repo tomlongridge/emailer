@@ -38,8 +38,7 @@ public class TowerListController extends BaseController {
     
 	@RequestMapping({"/", ""})
 	public String init(final ModelMap model) {
-	    model.addAttribute(towerSearchService.populateModel(null));
-	    return PAGE_TOWER_SEARCH;
+	    return redirect("/" + URLConstants.TOWERS + "/" + URLConstants.SEARCH_BOARDS);
 	}
 
 	@RequestMapping("/" + URLConstants.SEARCH_BOARDS)

@@ -46,7 +46,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
 		
 		final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -86,7 +86,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -109,7 +109,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -133,7 +133,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -159,12 +159,12 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
 		final Event event = eventDAO.find(noticeId);
 		if ((event == null) || (event.getBoard().getId() != board.getId())) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
 		}
 		
 		model.addAttribute("notice", event);
@@ -182,7 +182,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return redirect(URLConstants.HOME);
+            return redirect("/" + URLConstants.HOME);
         }
         
         Event event = new Event();
