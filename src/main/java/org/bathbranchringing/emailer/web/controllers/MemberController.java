@@ -9,6 +9,7 @@ import org.bathbranchringing.emailer.core.domain.Subscriber;
 import org.bathbranchringing.emailer.core.domain.User;
 import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.UserDAO;
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,15 +26,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(
         {
-            "/" + BoardController.URL_TOWER + "/{boardId}/" + MemberController.URL_MEMBERS,
-            "/" + BoardController.URL_GROUP + "/{boardId}/" + MemberController.URL_MEMBERS
+            "/" + URLConstants.SINGLE_TOWER + "/{boardId}/" + URLConstants.BOARD_MEMBERS,
+            "/" + URLConstants.SINGLE_GROUP + "/{boardId}/" + URLConstants.BOARD_MEMBERS
         }
 )
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class MemberController extends BaseController {
     
-    public static final String URL_MEMBERS = "members";
-
     private static final Logger LOG = LoggerFactory.getLogger(MemberController.class);
     
     private static final String PAGE_MEMBER_INFORMATION = "/pages/memberInformation";
@@ -53,7 +52,7 @@ public class MemberController extends BaseController {
         final Board board = initialise(model, boardId);
         if (board == null) {
             LOG.error("Unable to find board {}", boardId);
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         LOG.debug("<- View Member Information /{}", boardId);
@@ -65,18 +64,18 @@ public class MemberController extends BaseController {
                             @RequestParam(value = "action") final String action,
                             final ModelMap model) {
 
-        LOG.debug("-> Add Member /{}/{} (action = {})", boardId, URL_MEMBERS, action);
+        LOG.debug("-> Add Member /{}/{} (action = {})", boardId, URLConstants.BOARD_MEMBERS, action);
         
         final Board board = initialise(model, boardId);
         if (board == null) {
             LOG.error("Unable to find board {}", boardId);
-            return REDIRECT_HOME;
+            return redirect("/" + URLConstants.HOME);
         }
         
         final User loggedInUser = getUser();
         if (loggedInUser == null) {
             LOG.debug("User not logged in, redirecting to registration page");
-            return REDIRECT_REGISTER;
+            return redirect("/" + URLConstants.REGISTER);
         }
         
         LOG.debug("Retrieving user {} from database", loggedInUser.getId());
@@ -139,8 +138,8 @@ public class MemberController extends BaseController {
         LOG.debug("Persisting user changes");
         userDAO.update(user);
 
-        LOG.debug("<- Add Member /{}/{} (action = {})", boardId, URL_MEMBERS, action);
-        return "redirect:" + URL_MEMBERS + "?" + action;
+        LOG.debug("<- Add Member /{}/{} (action = {})", boardId, URLConstants.BOARD_MEMBERS, action);
+        return redirect(URLConstants.BOARD_MEMBERS + "?" + action);
         
     }
     
@@ -152,7 +151,7 @@ public class MemberController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
 
         List<Membership> membership = board.getMembers();
@@ -178,7 +177,7 @@ public class MemberController extends BaseController {
             }
         }
         
-        return "redirect:../" + URL_MEMBERS;
+        return redirect("../" + URLConstants.BOARD_MEMBERS);
     }
     
 }

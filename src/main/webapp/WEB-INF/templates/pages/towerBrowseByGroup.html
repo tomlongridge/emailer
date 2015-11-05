@@ -22,15 +22,24 @@
                     
                         <div th:if="${towerBrowseByGroupModel.groupLists ne null and !#lists.isEmpty(towerBrowseByGroupModel.groupLists)}">
                             <div th:each="groupList : ${towerBrowseByGroupModel.groupLists}">
-    	                        <ul>
+    	                        <ul th:unless="${groupList.selectedGroup}">
     	                            <li th:each="group : ${groupList.groups}">
     	                                <a th:if="${groupList.selectedGroup ne group.key}"
-    	                                   th:href="@{/towers/groups/{id}(id=${group.key})}"
+    	                                   th:href="@{/towers/groups{id}(id=${group.key})}"
     	                                   th:text="${group.value}"></a>
                                     	<span th:if="${groupList.selectedGroup eq group.key}"
                                        		  th:text="${group.value}" style="font-weight:bold"></span>
     	                            </li>
     	                        </ul>
+    	                        <p th:if="${groupList.selectedGroup}">
+    	                        	Affiliated To
+	    	                        <select onchange="location = this.options[this.selectedIndex].value;">
+	    	                        	<option th:each="group : ${groupList.groups}"
+	    	                        			th:value="@{/towers/groups{id}(id=${group.key})}"
+	    	                        			th:text="${group.value}"
+	    	                        			th:selected="${groupList.selectedGroup eq group.key}"/>
+	    	                        </select>
+    	                        </p>
                             </div>
                         </div>
                         

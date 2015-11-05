@@ -14,6 +14,7 @@ import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.CountryDAO;
 import org.bathbranchringing.emailer.core.repo.CountyDAO;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,17 +31,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(
         {
-            "/" + BoardController.URL_TOWER + "/{boardId}",
-            "/" + BoardController.URL_GROUP + "/{boardId}"
+            "/" + URLConstants.SINGLE_TOWER + "/{boardId}",
+            "/" + URLConstants.SINGLE_GROUP + "/{boardId}"
         }
 )
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class BoardController extends BaseController {
 
-    public static final String URL_TOWER = "tower";
-    public static final String URL_GROUP = "group";
-    
-    @Autowired
+	private static final String PAGE_BOARD = "/pages/board";
+	private static final String PAGE_TOWER_INFORMATION = "/pages/towerInformation";
+	private static final String PAGE_GROUP_INFORMATION = "/pages/groupInformation";
+	private static final String PAGE_EDIT_TOWER = "/pages/editTower";
+	private static final String PAGE_VIEW_NOTICE = "/pages/viewNotice";
+	private static final String PAGE_EDIT_NOTICE = "/pages/editNotice";
+
+	@Autowired
     private BoardDAO boardDAO;
     
 	@Autowired
@@ -52,28 +57,28 @@ public class BoardController extends BaseController {
     @Autowired
     private CountryDAO countryDAO;
 	
-	@RequestMapping(value = {"", "/", "/notices"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "/", "/" + URLConstants.NOTICES}, method = RequestMethod.GET)
 	public String noticesPage(@PathVariable final String boardId,
                               final ModelMap model) {
 		
 		final Board board = initialise(model, boardId);
 		if (board == null) {
-		    return REDIRECT_HOME;
+		    return redirect(URLConstants.HOME);
 		}
 		
 		final List<Notice> notices = noticeDAO.getBoardNotices(board);
 		model.addAttribute("notices", notices);
-		return "/pages/board";
+		return PAGE_BOARD;
 	}
     
-    @RequestMapping("/notices/{year}")
+    @RequestMapping("/" + URLConstants.NOTICES + "/{year}")
     public String noticesPage(@PathVariable final String boardId,
                               @PathVariable final int year,
                               final ModelMap model) {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -83,10 +88,10 @@ public class BoardController extends BaseController {
         final List<Notice> notice = noticeDAO.getBoardNotices(board, dateFrom.getTime(), dateTo.getTime());
         model.addAttribute("notices", notice);
 
-        return "/pages/board";
+        return PAGE_BOARD;
     }
     
-    @RequestMapping("/notices/{year}/{month}")
+    @RequestMapping("/" + URLConstants.NOTICES + "/{year}/{month}")
     public String noticesPage(@PathVariable final String boardId,
                               @PathVariable final int year,
                               @PathVariable final int month,
@@ -94,7 +99,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -104,10 +109,10 @@ public class BoardController extends BaseController {
         final List<Notice> notice = noticeDAO.getBoardNotices(board, dateFrom.getTime(), dateTo.getTime());
         model.addAttribute("notices", notice);
         
-        return "/pages/board";
+        return PAGE_BOARD;
     }
     
-    @RequestMapping("/notices/{year}/{month}/{day}")
+    @RequestMapping("/" + URLConstants.NOTICES + "/{year}/{month}/{day}")
     public String noticesPage(@PathVariable final String boardId,
                               @PathVariable final int year,
                               @PathVariable final int month,
@@ -116,7 +121,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -126,10 +131,10 @@ public class BoardController extends BaseController {
         final List<Notice> notice = noticeDAO.getBoardNotices(board, dateFrom.getTime(), dateTo.getTime());
         model.addAttribute("notices", notice);
 
-        return "/pages/board";
+        return PAGE_BOARD;
     }
 	
-	@RequestMapping(value = "/notices/{year}/{month}/{day}/{noticeId}")
+	@RequestMapping(value = "/" + URLConstants.NOTICES + "/{year}/{month}/{day}/{noticeId}")
 	public String noticePage(@PathVariable final String boardId,
                              @PathVariable final long year,
                              @PathVariable final long month,
@@ -140,68 +145,68 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
 		final Notice notice = noticeDAO.find(noticeId);
 		if ((notice == null) || (notice.getBoard().getId() != board.getId())) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
 		}
 		
 		model.addAttribute("notice", notice);
 	    if (edit) {
-	        return "/pages/editNotice";
+	        return PAGE_EDIT_NOTICE;
 	    } else {
-	        return "/pages/viewNotice";
+	        return PAGE_VIEW_NOTICE;
 	    }
 		
 	}
     
-    @RequestMapping("/notices/new")
+    @RequestMapping("/" + URLConstants.NOTICES + "/" + URLConstants.NEW_ENTITY)
     public String newNotice(@PathVariable final String boardId,
                               final ModelMap model) {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
 
         Notice notice = new Notice();
         notice.setBoard(board);
         model.addAttribute("notice", notice);
         
-        return "/pages/editNotice";
+        return PAGE_EDIT_NOTICE;
     }
     
-    @RequestMapping("/information")
+    @RequestMapping("/" + URLConstants.BOARD_INFORMATION)
     public String infoPage(@PathVariable final String boardId,
                            @RequestParam(required = false, defaultValue = "false") final boolean edit,
                            final ModelMap model) {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         Hibernate.initialize(board.getAffiliatedTo());
         
         if (board.isGroup()) {
             Hibernate.initialize(((Group) board).getAffiliates());
-            return "/pages/groupInformation";
+            return PAGE_GROUP_INFORMATION;
         } else {
             if (edit) {
                 model.addAttribute("editableTower", board);
                 model.addAttribute("countries", countryDAO.list());
                 model.addAttribute("counties", countyDAO.list());
-                return "/pages/editTower";
+                return PAGE_EDIT_TOWER;
             } else {
-                return "/pages/towerInformation";                
+                return PAGE_TOWER_INFORMATION;                
             }
         }
         
     }
     
-    @RequestMapping(value = "/information", method = RequestMethod.POST)
+    @RequestMapping(value = "/" + URLConstants.BOARD_INFORMATION, method = RequestMethod.POST)
     public String editTower(@PathVariable final String boardId,
                             @ModelAttribute("editableTower") @Valid final Tower tower,
                             final BindingResult bindingResult,
@@ -209,7 +214,7 @@ public class BoardController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         Hibernate.initialize(board.getAffiliatedTo());
@@ -219,7 +224,7 @@ public class BoardController extends BaseController {
                 model.addAttribute("editableTower", tower);
                 model.addAttribute("countries", countryDAO.list());
                 model.addAttribute("counties", countyDAO.list());
-                return "/pages/editTower"; 
+                return PAGE_EDIT_TOWER; 
             } else if (!board.isGroup()) {
                 
                 Tower originalTower = (Tower) board;
@@ -233,10 +238,10 @@ public class BoardController extends BaseController {
                 originalTower.setTenorWeightQtrs(tower.getTenorWeightQtrs());
                 originalTower.setTenorWeightLbs(tower.getTenorWeightLbs());
                 boardDAO.update(originalTower);
-                return "redirect:information"; 
+                return redirect(URLConstants.BOARD_INFORMATION); 
             }
         }
-        return REDIRECT_HOME; 
+        return redirect(URLConstants.HOME); 
     }
     
     

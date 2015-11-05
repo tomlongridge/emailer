@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.slf4j.MDC;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
@@ -32,8 +33,8 @@ public class AuthenticationRequestFilter extends OncePerRequestFilter {
                             new AntPathRequestMatcher("/css/**"),
                             new AntPathRequestMatcher("/js/**"),
                             new AntPathRequestMatcher("/fonts/**"),
-                            new AntPathRequestMatcher("/login/**"),
-                            new AntPathRequestMatcher("/register/**")));
+                            new AntPathRequestMatcher("/" + URLConstants.LOGIN + "/**"),
+                            new AntPathRequestMatcher("/" + URLConstants.REGISTER + "/**")));
 
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,

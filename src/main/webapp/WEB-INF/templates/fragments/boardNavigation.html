@@ -10,21 +10,21 @@
         <h3 th:if="${board.group}" th:text="${board.name}"></h3>
         <div class="list-group">
             <a class="list-group-item"
-                th:href="@{/{boardType}/{boardId}/notices(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}"
-                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/notices')) ? 'active' : ''}">Notices</a>
+                th:href="@{/{boardType}/{boardId}/{noticeURL}(boardType=${board.group}?${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_GROUP}:${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_TOWER},boardId=${board.identifier},noticeURL=${T(org.bathbranchringing.emailer.web.URLConstants).NOTICES})}"
+                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/' + T(org.bathbranchringing.emailer.web.URLConstants).NOTICES)) ? 'active' : ''}">Notices</a>
             <a class="list-group-item"
-                th:href="@{/{boardType}/{boardId}/diary(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}"
-                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/diary')) ? 'active' : ''}">Diary</a>
+                th:href="@{/{boardType}/{boardId}/diary(boardType=${board.group}?${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_GROUP}:${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_TOWER},boardId=${board.identifier})}"
+                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/' + T(org.bathbranchringing.emailer.web.URLConstants).BOARD_DIARY)) ? 'active' : ''}">Diary</a>
             <a class="list-group-item"
-                th:href="@{/{boardType}/{boardId}/information(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}"
-                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/information')) ? 'active' : ''}"
+                th:href="@{/{boardType}/{boardId}/information(boardType=${board.group}?${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_GROUP}:${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_TOWER},boardId=${board.identifier})}"
+                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/' + T(org.bathbranchringing.emailer.web.URLConstants).BOARD_INFORMATION)) ? 'active' : ''}"
                 th:text="${({board.group} ? 'Group' : 'Tower') + ' Information'}"></a>
             <a class="list-group-item"
-                th:href="@{/{boardType}/{boardId}/members(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}"
-                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/members')) ? 'active' : ''}">Members</a>
+                th:href="@{/{boardType}/{boardId}/members(boardType=${board.group}?${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_GROUP}:${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_TOWER},boardId=${board.identifier})}"
+                th:classappend="${(#httpServletRequest.requestURL.toString().contains('/' + T(org.bathbranchringing.emailer.web.URLConstants).BOARD_MEMBERS)) ? 'active' : ''}">Members</a>
         </div>
         <div class="btn-group" role="group" aria-label="...">
-            <form th:action="@{/{boardType}/{boardId}/members(boardType=${board.group} ? 'groups' : 'towers',boardId=${board.identifier})}" method="post">
+            <form th:action="@{/{boardType}/{boardId}/members(boardType=${board.group}?${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_GROUP}:${T(org.bathbranchringing.emailer.web.URLConstants).SINGLE_TOWER},boardId=${board.identifier})}" method="post">
                 <button type="submit" class="btn btn-default" name="action" value="subscribe"
                         th:unless="${board.isSubscribed(user)} or
                                    ${board.isMember(user)}">Subscribe</button>

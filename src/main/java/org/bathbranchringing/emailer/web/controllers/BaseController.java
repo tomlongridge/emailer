@@ -13,10 +13,9 @@ import org.springframework.ui.ModelMap;
 
 public class BaseController {
     
-    private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
+    private static final String REDIRECT = "redirect:";
 
-    protected final static String REDIRECT_HOME = "redirect:/home";
-    protected final static String REDIRECT_REGISTER = "redirect:/login";
+	private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 
     @Autowired
     private BoardDAO boardDAO;
@@ -63,6 +62,10 @@ public class BaseController {
         }
         
         return null;
+    }
+    
+    public static String redirect(final String page) {
+    	return REDIRECT + page;
     }
     
 }

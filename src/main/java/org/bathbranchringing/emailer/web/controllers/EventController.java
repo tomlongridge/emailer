@@ -6,6 +6,7 @@ import org.bathbranchringing.emailer.core.domain.Event;
 import org.bathbranchringing.emailer.core.domain.Notice;
 import org.bathbranchringing.emailer.core.domain.User;
 import org.bathbranchringing.emailer.core.repo.EventDAO;
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/events")
+@RequestMapping("/" + URLConstants.BOARD_EVENTS)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class EventController extends BaseController {
     
@@ -38,7 +39,7 @@ public class EventController extends BaseController {
                                  notice.getCreationDate(),
                                  noticeId);
         } else {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
 	}
     
@@ -55,7 +56,7 @@ public class EventController extends BaseController {
         notice.setModificationDate(notice.getCreationDate());
         
         final Long id = eventDAO.add((Event) notice);
-        return "redirect:/events/" + id; 
+        return redirect("/" + URLConstants.BOARD_EVENTS + "/" + id); 
     }
     
     @RequestMapping(value = "/{noticeId}", method = RequestMethod.POST)
@@ -74,7 +75,7 @@ public class EventController extends BaseController {
         originalEvent.setEndDate(notice.getEndDate());
         
         eventDAO.update(originalEvent);
-        return "redirect:/events/" + noticeId; 
+        return redirect("/" + URLConstants.BOARD_EVENTS + "/" + noticeId); 
     }
     
 }

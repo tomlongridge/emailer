@@ -8,9 +8,9 @@ import org.bathbranchringing.emailer.core.domain.Board;
 import org.bathbranchringing.emailer.core.domain.Notice;
 import org.bathbranchringing.emailer.core.domain.NotificationType;
 import org.bathbranchringing.emailer.core.domain.User;
-import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.NoticeDAO;
 import org.bathbranchringing.emailer.core.repo.NotificationDAO;
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/" + NoticeController.URL_NOTICES)
+@RequestMapping("/" + URLConstants.NOTICES)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class NoticeController extends BaseController {
     
     private static final String PAGE_EDIT_NOTICE = "/pages/editNotice";
 
-    public static final String URL_NOTICES = "notices";
-
     private static final Logger LOG = LoggerFactory.getLogger(NoticeController.class);
-    
-    @Autowired
-    private BoardDAO boardDAO;
     
     @Autowired
     private NoticeDAO noticeDAO;
@@ -52,16 +47,17 @@ public class NoticeController extends BaseController {
         LOG.debug("Retrieving notice");
 	    final Notice notice = noticeDAO.find(noticeId);
 	    if (notice == null) {
-	        return REDIRECT_HOME;
+	        return redirect(URLConstants.HOME);
 	    }
 	    
         LOG.debug("<- View Notice: /{}", noticeId);
-	    return String.format("redirect:/%1$s/%2$s/%3$s/%4$tY/%4$tm/%4$td/%5$d",
-	                         notice.getBoard().isGroup() ? BoardController.URL_GROUP : BoardController.URL_TOWER,
-	                         URL_NOTICES,
+	    return redirect(
+	    		String.format("/%1$s/%2$s/%3$s/%4$tY/%4$tm/%4$td/%5$d",
+	                         notice.getBoard().isGroup() ? URLConstants.SINGLE_GROUP : URLConstants.SINGLE_TOWER,
+	                         URLConstants.NOTICES,
 	                         notice.getBoard().getIdentifier(),
                              notice.getCreationDate(),
-                             noticeId);
+                             noticeId));
 	}
     
     @RequestMapping(value = {"", "/"}, method = RequestMethod.POST)
@@ -83,7 +79,7 @@ public class NoticeController extends BaseController {
         notificationDAO.add(notice, NotificationType.CREATION);
 
         LOG.debug("<- New Notice: /{}", noticeId);
-        return "redirect:/" + URL_NOTICES + "/" + noticeId; 
+        return redirect("/" + URLConstants.NOTICES + "/" + noticeId); 
         
     }
     
@@ -97,12 +93,12 @@ public class NoticeController extends BaseController {
         
         final Board board = initialise(model, notice.getBoard().getId());
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         if (!board.isAdmin(getUser())) {
             LOG.warn("Unauthorised edit attempted, user:{}", getUser());
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         final Notice originalNotice = noticeDAO.find(noticeId);
@@ -128,7 +124,7 @@ public class NoticeController extends BaseController {
             notificationDAO.add(originalNotice, NotificationType.MODIFICATION);
             
             LOG.debug("<- Edit Notice: /{}", noticeId);
-            return "redirect:/" + URL_NOTICES + "/" + noticeId; 
+            return redirect("/" + URLConstants.NOTICES + "/" + noticeId); 
         }
         
     }

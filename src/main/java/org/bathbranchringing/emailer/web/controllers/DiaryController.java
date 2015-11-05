@@ -9,8 +9,8 @@ import java.util.TreeMap;
 
 import org.bathbranchringing.emailer.core.domain.Board;
 import org.bathbranchringing.emailer.core.domain.Event;
-import org.bathbranchringing.emailer.core.repo.BoardDAO;
 import org.bathbranchringing.emailer.core.repo.EventDAO;
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -24,20 +24,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(
         {
-            "/" + BoardController.URL_TOWER + "/{boardId}/" + DiaryController.URL_DIARY,
-            "/" + BoardController.URL_GROUP + "/{boardId}/" + DiaryController.URL_DIARY
+            "/" + URLConstants.SINGLE_TOWER + "/{boardId}/" + URLConstants.BOARD_DIARY,
+            "/" + URLConstants.SINGLE_GROUP + "/{boardId}/" + URLConstants.BOARD_DIARY
         }
 )
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class DiaryController extends BaseController {
     
-    public static final String URL_DIARY = "diary";
-    
-    @Value("${diary.numMonths}")
+    private static final String PAGE_VIEW_EVENT = "/pages/viewEvent";
+	private static final String PAGE_EDIT_EVENT = "/pages/editEvent";
+
+	@Value("${diary.numMonths}")
     private String numMonthsInDiaryView;
-    
-    @Autowired
-    private BoardDAO boardDAO;
     
 	@Autowired
 	private EventDAO eventDAO;
@@ -48,7 +46,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
 		
 		final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -88,7 +86,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -111,7 +109,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -135,7 +133,7 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         final Calendar dateFrom = GregorianCalendar.getInstance();
@@ -161,37 +159,37 @@ public class DiaryController extends BaseController {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
 		final Event event = eventDAO.find(noticeId);
 		if ((event == null) || (event.getBoard().getId() != board.getId())) {
-            return "redirect:/home";
+            return redirect(URLConstants.HOME);
 		}
 		
 		model.addAttribute("notice", event);
 	    if (edit) {
-	        return "/pages/editEvent";
+	        return PAGE_EDIT_EVENT;
 	    } else {
-	        return "/pages/viewEvent";
+	        return PAGE_VIEW_EVENT;
 	    }
 		
 	}
     
-    @RequestMapping("/new")
+    @RequestMapping("/" + URLConstants.NEW_ENTITY)
     public String newEvent(@PathVariable final String boardId,
                            final ModelMap model) {
 
         final Board board = initialise(model, boardId);
         if (board == null) {
-            return REDIRECT_HOME;
+            return redirect(URLConstants.HOME);
         }
         
         Event event = new Event();
         event.setBoard(board);
         model.addAttribute("notice", event);
         
-        return "/pages/editEvent";
+        return PAGE_EDIT_EVENT;
     }
 	
 }

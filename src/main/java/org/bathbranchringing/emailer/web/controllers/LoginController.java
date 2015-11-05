@@ -1,5 +1,6 @@
 package org.bathbranchringing.emailer.web.controllers;
 
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.jboss.logging.MDC;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class LoginController extends BaseController {
 	
-	@RequestMapping("/login")
+	private static final String PAGE_LOGIN = "/pages/login";
+
+	@RequestMapping("/" + URLConstants.LOGIN)
 	public String init(final ModelMap model) {
-		return "/pages/login";
+		return PAGE_LOGIN;
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/" + URLConstants.LOGIN, method = RequestMethod.POST)
 	public void loggedIn() {
 	    MDC.put("user", getUser().getEmailAddress());
 	}

@@ -1,7 +1,6 @@
 package org.bathbranchringing.emailer.config;
 
-import javax.sql.DataSource;
-
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +18,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DataSource dataSource;
-    
     @Autowired
     private UserDetailsService userDAO;
     
@@ -49,15 +45,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
             .addFilterAfter(authRequestFilter, FilterSecurityInterceptor.class)
         .formLogin()
-            .loginPage("/login")
+            .loginPage("/" + URLConstants.LOGIN)
             .permitAll()
         .and()
             .logout()
                 .deleteCookies("remove")
                 .invalidateHttpSession(true)
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutUrl("/" + URLConstants.LOGOUT)
+                .logoutSuccessUrl("/" + URLConstants.LOGIN + "?logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/" + URLConstants.LOGOUT))
                 .permitAll();
         
     }

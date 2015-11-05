@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bathbranchringing.emailer.core.domain.County;
 import org.bathbranchringing.emailer.core.repo.CountyDAO;
+import org.bathbranchringing.emailer.web.URLConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/countries")
+@RequestMapping("/" + URLConstants.COUNTRIES)
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class CountyController extends BaseController {
     
     @Autowired
     private CountyDAO countyDAO;
-	
-	@RequestMapping(value = "/{country}/counties", produces = MediaType.APPLICATION_JSON_VALUE)
+    
+	@RequestMapping(value = "/{country}/" + URLConstants.COUNTIES, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<County> getCounties(@PathVariable final String country) {
 	    return countyDAO.find(country);
 	}
