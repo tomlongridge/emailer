@@ -46,7 +46,9 @@ public class TowerDAO extends GenericDAO<Tower, Long> {
     
     @SuppressWarnings("unchecked")
     public List<Tower> listAffiliates(final String groupId) {
-    	return currentSession().createQuery("from Tower").list();
+    	return currentSession().createQuery("from Tower tower where (select group.id from Group group where group.identifier = :groupId) in elements(tower.affiliatedTo)")
+    			.setString("groupId", groupId)
+    			.list();
     }
 
 }

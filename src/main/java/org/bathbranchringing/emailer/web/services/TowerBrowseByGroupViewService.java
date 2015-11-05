@@ -38,7 +38,7 @@ public class TowerBrowseByGroupViewService {
         for (Group group : groupDAO.list()) {
             if (group.getAffiliatedTo().isEmpty()) {
                 LOG.info("Adding top-level group {}", group.getIdentifier());
-                topLevelGroups.getGroups().put(group.getIdentifier(), group.getDisplayName());
+                topLevelGroups.getGroups().put("/" + group.getIdentifier(), group.getDisplayName());
             }
         }
         LOG.info("Added {} top-level groups", topLevelGroups.getGroups().size());
@@ -47,25 +47,34 @@ public class TowerBrowseByGroupViewService {
         if (groups != null) {
 	        LOG.info("Adding sub-groups");
 	        TowerBrowseGroupList lastGroupList = topLevelGroups;
+	        String lastGroupId = null;
+	        String groupUrl = "";
 	        for (String groupId : groups) {
+	        	lastGroupId = groupId;
 	            Group group = groupDAO.find(groupId);
 	            if (group != null) {
 	                LOG.info("Setting {} as a selected group", groupId);
-	                lastGroupList.setSelectedGroup(groupId);
+	                groupUrl += "/" + groupId;
+	                lastGroupList.setSelectedGroup(groupUrl);
 	                
 	                lastGroupList = new TowerBrowseGroupList();
 	                for (Board affiliate : group.getAffiliates()) {
 	                    if (affiliate.isGroup()) {
 	                        LOG.info("Adding group {}", affiliate.getIdentifier());
-	                        lastGroupList.getGroups().put(affiliate.getIdentifier(), affiliate.getDisplayName());
+	                        lastGroupList.getGroups().put(groupUrl + "/" + affiliate.getIdentifier(), affiliate.getDisplayName());
 	                    }
 	                }
 	                LOG.info("Added {} sub-groups", lastGroupList.getGroups().size());
 	            } else {
 	                LOG.info("Unable to find group {}, ignoring from model", groupId);
 	            }
+	            
+	            model.getGroupLists().add(lastGroupList);
 	        }
-	        towerDAO.listAffiliates(lastGroupList.getSelectedGroup());
+	        
+	        if (lastGroupId != null) {
+	        	model.setTowers(towerDAO.listAffiliates(lastGroupId));
+	        }
         }
         
         

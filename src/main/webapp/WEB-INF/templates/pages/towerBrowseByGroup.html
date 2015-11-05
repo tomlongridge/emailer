@@ -38,7 +38,7 @@
                         	There are no towers currently registered on TowerBoard for this category.
                         </div>
     
-                        <table th:replace="/fragments/towerList :: towerList"></table>
+                        <table th:replace="/fragments/towerList :: towerList(towers = ${towerBrowseByGroupModel.towers})"></table>
                             
                     </div>
     
